@@ -25,6 +25,7 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
+			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.pictureBox2 = new System.Windows.Forms.PictureBox();
@@ -67,10 +68,14 @@
 			this.RankPlay = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.button_LoadTeams = new System.Windows.Forms.Button();
-			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-			this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.emailToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.label_Version = new System.Windows.Forms.Label();
+			this.groupBox4 = new System.Windows.Forms.GroupBox();
+			this.label5 = new System.Windows.Forms.Label();
+			this.textBox_APIKey = new System.Windows.Forms.TextBox();
+			this.button_GenStats = new System.Windows.Forms.Button();
+			this.button_HelpStats = new System.Windows.Forms.Button();
+			this.checkBox_ProdKey = new System.Windows.Forms.CheckBox();
+			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
 			this.tabControl1.SuspendLayout();
@@ -85,7 +90,7 @@
 			this.groupBox2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView_Team)).BeginInit();
 			this.groupBox1.SuspendLayout();
-			this.menuStrip1.SuspendLayout();
+			this.groupBox4.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// pictureBox1
@@ -115,7 +120,7 @@
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(425, 100);
 			this.label1.TabIndex = 2;
-			this.label1.Text = "UMich League of Legends\r\nTeam Balancer";
+			this.label1.Text = "League of Legends\r\nTeam Balancer\r\nStats Collector";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// tabControl1
@@ -399,13 +404,14 @@
 			// 
 			// tabPage3
 			// 
+			this.tabPage3.Controls.Add(this.groupBox4);
 			this.tabPage3.Controls.Add(this.groupBox2);
 			this.tabPage3.Controls.Add(this.groupBox1);
 			this.tabPage3.Location = new System.Drawing.Point(4, 22);
 			this.tabPage3.Name = "tabPage3";
 			this.tabPage3.Size = new System.Drawing.Size(629, 373);
 			this.tabPage3.TabIndex = 2;
-			this.tabPage3.Text = "Teams";
+			this.tabPage3.Text = "Teams / Stats";
 			this.tabPage3.UseVisualStyleBackColor = true;
 			// 
 			// groupBox2
@@ -416,7 +422,7 @@
 			this.groupBox2.Controls.Add(this.dataGridView_Team);
 			this.groupBox2.Location = new System.Drawing.Point(3, 62);
 			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(623, 223);
+			this.groupBox2.Size = new System.Drawing.Size(623, 216);
 			this.groupBox2.TabIndex = 2;
 			this.groupBox2.TabStop = false;
 			this.groupBox2.Text = "Teams";
@@ -432,11 +438,11 @@
 			// 
 			// label_TeamPoints
 			// 
-			this.label_TeamPoints.Location = new System.Drawing.Point(161, 178);
+			this.label_TeamPoints.Location = new System.Drawing.Point(161, 179);
 			this.label_TeamPoints.Name = "label_TeamPoints";
 			this.label_TeamPoints.Size = new System.Drawing.Size(456, 34);
 			this.label_TeamPoints.TabIndex = 2;
-			this.label_TeamPoints.Text = "Team Points: ";
+			this.label_TeamPoints.Text = "No Team Points";
 			this.label_TeamPoints.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// comboBox_Teams
@@ -506,7 +512,7 @@
 			this.groupBox1.Size = new System.Drawing.Size(623, 53);
 			this.groupBox1.TabIndex = 0;
 			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Load";
+			this.groupBox1.Text = "Load Teams";
 			// 
 			// button_LoadTeams
 			// 
@@ -518,31 +524,6 @@
 			this.button_LoadTeams.UseVisualStyleBackColor = true;
 			this.button_LoadTeams.Click += new System.EventHandler(this.button_LoadTeams_Click);
 			// 
-			// menuStrip1
-			// 
-			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.settingsToolStripMenuItem});
-			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(661, 24);
-			this.menuStrip1.TabIndex = 4;
-			this.menuStrip1.Text = "menuStrip1";
-			// 
-			// settingsToolStripMenuItem
-			// 
-			this.settingsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.emailToolStripMenuItem});
-			this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-			this.settingsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
-			this.settingsToolStripMenuItem.Text = "Settings";
-			// 
-			// emailToolStripMenuItem
-			// 
-			this.emailToolStripMenuItem.Name = "emailToolStripMenuItem";
-			this.emailToolStripMenuItem.Size = new System.Drawing.Size(142, 22);
-			this.emailToolStripMenuItem.Text = "Email Set-Up";
-			this.emailToolStripMenuItem.Click += new System.EventHandler(this.emailToolStripMenuItem_Click);
-			// 
 			// label_Version
 			// 
 			this.label_Version.Location = new System.Drawing.Point(12, 548);
@@ -551,6 +532,72 @@
 			this.label_Version.TabIndex = 5;
 			this.label_Version.Text = "VERSION MESSAGE";
 			this.label_Version.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// groupBox4
+			// 
+			this.groupBox4.Controls.Add(this.checkBox_ProdKey);
+			this.groupBox4.Controls.Add(this.button_HelpStats);
+			this.groupBox4.Controls.Add(this.label5);
+			this.groupBox4.Controls.Add(this.textBox_APIKey);
+			this.groupBox4.Controls.Add(this.button_GenStats);
+			this.groupBox4.Location = new System.Drawing.Point(3, 284);
+			this.groupBox4.Name = "groupBox4";
+			this.groupBox4.Size = new System.Drawing.Size(623, 80);
+			this.groupBox4.TabIndex = 3;
+			this.groupBox4.TabStop = false;
+			this.groupBox4.Text = "Load Stats";
+			// 
+			// label5
+			// 
+			this.label5.Location = new System.Drawing.Point(207, 19);
+			this.label5.Name = "label5";
+			this.label5.Size = new System.Drawing.Size(102, 20);
+			this.label5.TabIndex = 2;
+			this.label5.Text = "API Key:";
+			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// textBox_APIKey
+			// 
+			this.textBox_APIKey.Location = new System.Drawing.Point(315, 19);
+			this.textBox_APIKey.Name = "textBox_APIKey";
+			this.textBox_APIKey.Size = new System.Drawing.Size(294, 20);
+			this.textBox_APIKey.TabIndex = 2;
+			// 
+			// button_GenStats
+			// 
+			this.button_GenStats.Location = new System.Drawing.Point(6, 19);
+			this.button_GenStats.Name = "button_GenStats";
+			this.button_GenStats.Size = new System.Drawing.Size(93, 55);
+			this.button_GenStats.TabIndex = 1;
+			this.button_GenStats.Text = "Load .txt Games\r\nGenerate Stats";
+			this.button_GenStats.UseVisualStyleBackColor = true;
+			this.button_GenStats.Click += new System.EventHandler(this.button_GenStats_Click);
+			// 
+			// button_HelpStats
+			// 
+			this.button_HelpStats.Location = new System.Drawing.Point(108, 19);
+			this.button_HelpStats.Name = "button_HelpStats";
+			this.button_HelpStats.Size = new System.Drawing.Size(93, 55);
+			this.button_HelpStats.TabIndex = 3;
+			this.button_HelpStats.Text = "Help: Format";
+			this.button_HelpStats.UseVisualStyleBackColor = true;
+			this.button_HelpStats.Click += new System.EventHandler(this.button_HelpStats_Click);
+			// 
+			// checkBox_ProdKey
+			// 
+			this.checkBox_ProdKey.Location = new System.Drawing.Point(210, 50);
+			this.checkBox_ProdKey.Name = "checkBox_ProdKey";
+			this.checkBox_ProdKey.Size = new System.Drawing.Size(107, 24);
+			this.checkBox_ProdKey.TabIndex = 4;
+			this.checkBox_ProdKey.Text = "Production Key?";
+			this.toolTip1.SetToolTip(this.checkBox_ProdKey, "Check if your API is Production approved by Riot");
+			this.checkBox_ProdKey.UseVisualStyleBackColor = true;
+			// 
+			// toolTip1
+			// 
+			this.toolTip1.AutoPopDelay = 5000;
+			this.toolTip1.InitialDelay = 50;
+			this.toolTip1.ReshowDelay = 100;
 			// 
 			// MainForm
 			// 
@@ -562,9 +609,7 @@
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.pictureBox2);
 			this.Controls.Add(this.pictureBox1);
-			this.Controls.Add(this.menuStrip1);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MainMenuStrip = this.menuStrip1;
 			this.Name = "MainForm";
 			this.Text = "League of Legends Balancer";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
@@ -584,10 +629,9 @@
 			this.groupBox2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView_Team)).EndInit();
 			this.groupBox1.ResumeLayout(false);
-			this.menuStrip1.ResumeLayout(false);
-			this.menuStrip1.PerformLayout();
+			this.groupBox4.ResumeLayout(false);
+			this.groupBox4.PerformLayout();
 			this.ResumeLayout(false);
-			this.PerformLayout();
 
 		}
 
@@ -599,9 +643,6 @@
 		private System.Windows.Forms.TabControl tabControl1;
 		private System.Windows.Forms.TabPage tabPage1;
 		private System.Windows.Forms.TabPage tabPage2;
-		private System.Windows.Forms.MenuStrip menuStrip1;
-		private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem emailToolStripMenuItem;
 		private System.Windows.Forms.TabPage tabPage3;
 		private System.Windows.Forms.Button button_AddPlayer;
 		private System.Windows.Forms.DataGridView dataGridView_Players;
@@ -638,6 +679,13 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn Rank;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Value;
 		private System.Windows.Forms.Label label3;
+		private System.Windows.Forms.GroupBox groupBox4;
+		private System.Windows.Forms.Label label5;
+		private System.Windows.Forms.TextBox textBox_APIKey;
+		private System.Windows.Forms.Button button_GenStats;
+		private System.Windows.Forms.Button button_HelpStats;
+		private System.Windows.Forms.CheckBox checkBox_ProdKey;
+		private System.Windows.Forms.ToolTip toolTip1;
 	}
 }
 

@@ -35,10 +35,6 @@ namespace LoLBalancing
 		public const string challengerHex = "#FFD966";
 
 		// Saveable through Properties.Settings
-		static public string emailName;
-		static public string emailPass;
-		static public string emailSubject;
-		static public string emailBody;
 		static public string points;
 
 		// Balancing Variables
@@ -192,10 +188,6 @@ namespace LoLBalancing
 		private void MainForm_Load(object sender, EventArgs e) {
 			label_Version.Text = "v" + version + " by Steven Duan (sduans@umich.edu)";
 			// Load Properties.Settings
-			emailName = Properties.Settings.Default.email_Name;
-			emailPass = Properties.Settings.Default.email_Pass;
-			emailSubject = Properties.Settings.Default.email_Sub;
-			emailBody = Properties.Settings.Default.email_Body;
 			string PtsList = Properties.Settings.Default.PointsList;
 			if (!string.IsNullOrWhiteSpace(PtsList)) {
 				string[] Pts = PtsList.Split(' ');
@@ -218,35 +210,25 @@ namespace LoLBalancing
 					FillCellColor(RankRow, 0, Tier);
 				}
 			}
+			textBox_APIKey.Text = Properties.Settings.Default.APIKey;
 		}
 
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
 			// Save into Properties.Settings
-			Properties.Settings.Default.email_Name = emailName;
-			Properties.Settings.Default.email_Pass = emailPass;
-			Properties.Settings.Default.email_Sub = emailSubject;
-			Properties.Settings.Default.email_Body = emailBody;
 			string Pts = "";
 			for (int i = 1; i < dataGridView_Ranks.Rows.Count; ++i) {
 				int Pt = int.Parse(dataGridView_Ranks[1, i].Value.ToString());
 				Pts += Pt + " ";
 			}
 			Pts.TrimEnd(' ');
-			Properties.Settings.Default.PointsList = Pts;			
+			Properties.Settings.Default.PointsList = Pts;
+			Properties.Settings.Default.APIKey = textBox_APIKey.Text;
+			Properties.Settings.Default.Save();
 		}
 
 		#endregion
 
 		#region Event Handlers (TabPage: Player Roster)
-
-		// WinForm for setting up Email Account and Content
-		private void emailToolStripMenuItem_Click(object sender, EventArgs e) {
-			if (MessageBox.Show("Feature not yet implemented. Do you still want to look?", "Note", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes) {
-				EmailSetting Email_Win = new EmailSetting();
-				Email_Win.Dialog_Init();
-				// Sets the email strings
-			}
-		}
 
 		// WinForm for Adding a Player
 		private void button_AddPlayer_Click(object sender, EventArgs e) {
@@ -812,7 +794,7 @@ namespace LoLBalancing
 
 		#endregion
 
-		#region Event Handlers (TabPage: Teams & Emails)
+		#region Event Handlers (TabPage: Teams & Stats)
 
 		// Loads the total number of Teams. Also sets how many 
 		private void button_LoadTeams_Click(object sender, EventArgs e) {
@@ -821,6 +803,16 @@ namespace LoLBalancing
 
 		// Based on the Team selected, display the Team
 		private void comboBox_Teams_SelectedIndexChanged(object sender, EventArgs e) {
+
+		}
+
+		// Loads Stats based on the following format.
+		private void button_GenStats_Click(object sender, EventArgs e) {
+
+		}
+
+		// Help box for the .txt format
+		private void button_HelpStats_Click(object sender, EventArgs e) {
 
 		}
 
