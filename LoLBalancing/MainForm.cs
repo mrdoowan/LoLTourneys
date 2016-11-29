@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Windows.Forms;
+using System.Net;
+using Newtonsoft.Json.Linq;
 using Excel = Microsoft.Office.Interop.Excel;
 
 namespace LoLBalancing
@@ -22,7 +24,7 @@ namespace LoLBalancing
 
 		// Variables for upgrading
 		static private bool upgrading = false;
-		private const string version = "1.0.0";
+		private const string version = "0.Shit.Alpha";
 
 		// Color Codes for Ranks
 		public const string levelHex = "#B4A7D6";
@@ -35,7 +37,7 @@ namespace LoLBalancing
 		public const string challengerHex = "#FFD966";
 
 		// Saveable through Properties.Settings
-		static public string points;
+
 
 		// Balancing Variables
 		static private Dictionary<string, int> DefRanktoPts = new Dictionary<string, int>() {
@@ -120,11 +122,53 @@ namespace LoLBalancing
 		private List<Team> Teams = new List<Team>();
 		private Random Rand = new Random();
 
-		#endregion
+        // Txt File strings
+        private string MatchTxt;
+        private string NamesTxt;
 
-		#region Helper Functions
+        // Stats Variables
+        public class StatsPlayer
+        {
+            public string champ { get; set; }
+            public string role { get; set; }
+            public string summoner { get; set; }
 
-		private void Update_TotPlayers() {
+            // Default Constructor
+            public StatsPlayer(string champ_, string role_, string summoner_ = "") {
+                champ = champ_;
+                role = role_;
+                summoner = summoner_;
+            }
+        }
+
+        public class StatsGame
+        {
+            public List<StatsPlayer> Players;
+            public int number { get; set; }
+            public int gameID { get; set; }
+            public int redTeamNum { get; set; }
+            public int blueTeamNum { get; set; }
+
+            // Default Constructor
+            public StatsGame(int num_, int ID_, int red_, int blue_) {
+                Players = new List<StatsPlayer>();
+                number = num_;
+                gameID = ID_;
+                redTeamNum = red_;
+                blueTeamNum = blue_;
+            }
+        }
+
+        private int gameNum;
+        private int totalGames;
+        private List<List<string>> IGNs;
+        private List<StatsGame> statsGames = new List<StatsGame>();
+
+        #endregion
+
+        #region Helper Functions
+
+        private void Update_TotPlayers() {
 			int numPlayers = dataGridView_Players.Rows.Count;
 			label_Total.Text = "Total Players: " + numPlayers;
 		}
@@ -195,7 +239,7 @@ namespace LoLBalancing
 				foreach (string Rank in DefRanktoPts.Keys) {
 					if (i < Pts.Length) { dataGridView_Ranks.Rows.Add(Rank, Pts[i]); }
 					i++;
-					DataGridViewRow RankRow = dataGridView_Ranks.Rows[dataGridView_Players.Rows.Count - 1];
+					DataGridViewRow RankRow = dataGridView_Ranks.Rows[dataGridView_Ranks.Rows.Count - 1];
 					string Tier = Rank.Split(' ')[0];
 					FillCellColor(RankRow, 0, Tier);
 				}
@@ -211,12 +255,13 @@ namespace LoLBalancing
 				}
 			}
 			textBox_APIKey.Text = Properties.Settings.Default.APIKey;
+			comboBox_Region.SelectedIndex = 0;
 		}
 
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
 			// Save into Properties.Settings
 			string Pts = "";
-			for (int i = 1; i < dataGridView_Ranks.Rows.Count; ++i) {
+			for (int i = 0; i < dataGridView_Ranks.Rows.Count; ++i) {
 				int Pt = int.Parse(dataGridView_Ranks[1, i].Value.ToString());
 				Pts += Pt + " ";
 			}
@@ -410,11 +455,13 @@ namespace LoLBalancing
 
 		// Resets the Default in Points
 		private void button_ResetPoints_Click(object sender, EventArgs e) {
-			int i = 0;
-			foreach (int Pts in DefRanktoPts.Values) {
-				try { dataGridView_Ranks[1, i].Value = Pts.ToString(); }
-				catch { }
-				i++;
+			if (MessageBox.Show("Do you want to reset your values back to Default?", "Note", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) {
+				int i = 0;
+				foreach (int Pts in DefRanktoPts.Values) {
+					try { dataGridView_Ranks[1, i].Value = Pts.ToString(); }
+					catch { }
+					i++;
+				}
 			}
 		}
 
@@ -541,7 +588,7 @@ namespace LoLBalancing
 				Excel.Worksheet xlWorkSheet;
 				object mis = System.Reflection.Missing.Value;
 				xlWorkBook = xlApp.Workbooks.Add(mis);
-				xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+                xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
 				try {
 					xlWorkSheet.PageSetup.PaperSize = Excel.XlPaperSize.xlPaper11x17;
 					xlWorkSheet.PageSetup.Orientation = Excel.XlPageOrientation.xlLandscape;
@@ -622,7 +669,6 @@ namespace LoLBalancing
 				}
 				releaseObject(xlWorkBook);
 				releaseObject(xlApp);
-				Cursor.Current = Cursors.Default;
 				Cursor.Current = Cursors.Default;
 			}
 		}
@@ -794,28 +840,195 @@ namespace LoLBalancing
 
 		#endregion
 
-		#region Event Handlers (TabPage: Teams & Stats)
+		#region Event Handlers (TabPage: Teams)
 
 		// Loads the total number of Teams. Also sets how many 
 		private void button_LoadTeams_Click(object sender, EventArgs e) {
 
 		}
 
-		// Based on the Team selected, display the Team
-		private void comboBox_Teams_SelectedIndexChanged(object sender, EventArgs e) {
+        private void button_SaveTeamTxt_Click(object sender, EventArgs e) {
+
+        }
+
+        // Based on the Team selected, display the Team
+        private void comboBox_Teams_SelectedIndexChanged(object sender, EventArgs e) {
 
 		}
 
-		// Loads Stats based on the following format.
-		private void button_GenStats_Click(object sender, EventArgs e) {
+        #endregion
 
-		}
+        #region Event Handlers (TabPage: Stats)
+        
+        // Loads Stats based on the following format.
 
-		// Help box for the .txt format
-		private void button_HelpStats_Click(object sender, EventArgs e) {
+        private void button_LoadMatches_Click(object sender, EventArgs e) {
+            OpenFileDialog dlgFileOpen = new OpenFileDialog();
+            dlgFileOpen.Filter = "Text files (*.txt)|*.txt";
+            dlgFileOpen.Title = "Load Match History IDs";
+            dlgFileOpen.RestoreDirectory = true;
+            if (dlgFileOpen.ShowDialog() == DialogResult.OK) {
+                try {
+                    StreamReader sr = new StreamReader(dlgFileOpen.FileName);
+                    MatchTxt = sr.ReadToEnd();
+                    label_MatchLoad.Visible = true;
+                }
+                catch {
+                    MessageBox.Show("Error in loading .Txt.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
 
-		}
+        private void button_LoadNames_Click(object sender, EventArgs e) {
+            OpenFileDialog dlgFileOpen = new OpenFileDialog();
+            dlgFileOpen.Filter = "Text files (*.txt)|*.txt";
+            dlgFileOpen.Title = "Load Summoners";
+            dlgFileOpen.RestoreDirectory = true;
+            if (dlgFileOpen.ShowDialog() == DialogResult.OK) {
+                try {
+                    StreamReader sr = new StreamReader(dlgFileOpen.FileName);
+                    NamesTxt = sr.ReadToEnd();
+                    label_NamesLoad.Visible = true;
+                }
+                catch {
+                    MessageBox.Show("Error in loading .Txt.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
 
-		#endregion
-	}
+        // Helper functions
+        private bool parseNames_Txt() {
+            try {
+                // ---------------------------------
+                // PARSE NAMES .TXT
+                // ---------------------------------
+                string[] NamesRow = NamesTxt.Split('\n');
+                int TeamNum = 1, NumCheck = 0;
+                List<string> TeamIGNs = new List<string>();
+                for (int i = 0; i < NamesRow.Length; ++i) {
+                    if (i == 0) {
+                        // First Row should be a 1
+                        if (int.Parse(NamesRow[i]) != 1) {
+                            MessageBox.Show("Wrong Format: 1 isn't the beginning of the Names .txt", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return false;
+                        }
+                    }
+                    else if (int.TryParse(NamesRow[i], out NumCheck)) {
+                        // Reading Number
+                        if (NumCheck != TeamNum + 1) {
+                            MessageBox.Show("Team Numbers are not chronological.\nReload a correct Names .txt", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return false;
+                        }
+                        else if (TeamIGNs.Count < 5) {
+                            MessageBox.Show("There are < 5 people in a Team.\nReload a correct Names .txt", "Error",
+                                MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            return false;
+                        }
+                        else {
+                            // We see a Number, so we add the List of Summoners
+                            IGNs.Add(TeamIGNs);
+                            TeamIGNs = new List<string>();
+                            TeamNum++;
+                        }
+                    }
+                    else {
+                        // Reading String (Summoner)
+                        TeamIGNs.Add(NamesRow[i]);
+                    }
+                }
+                // Add the very last team.
+                if (TeamIGNs.Count < 5) {
+                    MessageBox.Show("There are < 5 people in a Team.\nReload a correct Names .txt", "Error",
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
+                }
+                else {
+                    IGNs.Add(TeamIGNs);
+                }
+            }
+            catch (Exception e) {
+                MessageBox.Show("Error in parsing Names\nReason: " + e.Message, 
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            return true;
+        }
+
+        // Helper function to Load Matches
+        private bool parseMatch_Txt() {
+            try {
+                // --------------- Retrieve Champion Information 
+                // (This will also authenticate the API Key)
+                string ChampJson = "";
+                using (var WC = new WebClient()) {
+                    ChampJson = WC.DownloadString("https://global.api.pvp.net/api/lol/static-data/" + comboBox_Region.Text +
+                        "/v1.2/champion?locale=en_US&dataById=true&api_key=" + textBox_APIKey.Text);
+                }
+                JToken Champs = JObject.Parse(ChampJson)["data"];
+                // --------------- Parsing MatchTxt
+                string[] matchRow = MatchTxt.Split('\n');
+                int numTeams = int.Parse(matchRow[0]);
+                for (int i = 1; i < matchRow.Length; ++i) {
+                    string[] Details = matchRow[i].Split(' ');
+                    int ID = int.Parse(Details[0]);
+                    int BlueTeamNum = int.Parse(Details[1]);
+                    int RedTeamNum = int.Parse(Details[2]);
+                }
+                totalGames = matchRow.Length - 1;
+                
+            }
+            catch (Exception e) {
+                MessageBox.Show("Error in parsing Matches\nReason: " + e.Message, 
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            return true;
+        }
+
+        // Or otherwise known as the Compile Matches & Names
+        // Save a preliminary .txt file
+        private void button_GenNames_Click(object sender, EventArgs e) {
+            if (string.IsNullOrWhiteSpace(MatchTxt) || string.IsNullOrWhiteSpace(NamesTxt)) {
+                MessageBox.Show("No matches or names loaded.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+            Application.DoEvents();
+            Cursor.Current = Cursors.WaitCursor;
+            if (!parseNames_Txt()) { return; }
+            if (!parseMatch_Txt()) { return; }
+            Cursor.Current = Cursors.Default;
+        }
+
+        private void button_Next_Click(object sender, EventArgs e) {
+
+        }
+
+        private void button_Prev_Click(object sender, EventArgs e) {
+
+        }
+
+        private void button_GenStats_Click(object sender, EventArgs e) {
+            if (!string.IsNullOrWhiteSpace(MatchTxt) && !string.IsNullOrWhiteSpace(NamesTxt)) {
+                label_StatsMsg.Visible = true;
+                StatsGen Stats = new StatsGen();
+                Stats.Generate(MatchTxt, NamesTxt, textBox_APIKey.Text, comboBox_Region.Text.ToLower());
+                label_StatsMsg.Visible = false;
+            }
+            else {
+                MessageBox.Show("Matches and/or Names not loaded.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void button_LoadComp_Click(object sender, EventArgs e) {
+
+        }
+
+        private void button_SaveComp_Click(object sender, EventArgs e) {
+
+        }
+
+        #endregion
+    }
 }
