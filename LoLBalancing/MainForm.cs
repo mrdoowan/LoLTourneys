@@ -1104,9 +1104,12 @@ namespace LoLBalancing
             int teamNum, ComboBox role, ComboBox names, Label champ) {
             List<string> teamIGNs = IGNs[teamNum - 1];
             role.Text = page.Players[playerNum].role;
+            names.Text = "";
+            names.Items.Clear();    // Clear the items first
             for (int i = 0; i < teamIGNs.Count; ++i) {
                 names.Items.Add(teamIGNs[i]);
             }
+            names.Text = page.Players[playerNum].summoner;
             champ.Text = page.Players[playerNum].champ;
         }
 
