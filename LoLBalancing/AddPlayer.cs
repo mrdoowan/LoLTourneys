@@ -39,28 +39,28 @@ namespace LoLBalancing
 				// Modify colors based on Ranking
 				switch (Tier) {
 					case "Level":
-						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.levelHex);
+						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.LEVELHEX);
 						break;
 					case "Bronze":
-						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.bronzeHex);
+						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.BRONZEHEX);
 						break;
 					case "Silver":
-						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.silverHex);
+						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.SILVERHEX);
 						break;
 					case "Gold":
-						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.goldHex);
+						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.GOLDHEX);
 						break;
 					case "Platinum":
-						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.platHex);
+						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.PLATHEX);
 						break;
 					case "Diamond":
-						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.diamondHex);
+						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.DIAMONDHEX);
 						break;
 					case "Master":
-						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.masterHex);
+						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.MASTERHEX);
 						break;
 					case "Challenger":
-						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.challengerHex);
+						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.CHALLENGERHEX);
 						break;
 					default:
 						break;
@@ -126,28 +126,28 @@ namespace LoLBalancing
 				// Modify colors based on Ranking
 				switch (Tier) {
 					case "Level":
-						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.levelHex);
+						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.LEVELHEX);
 						break;
 					case "Bronze":
-						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.bronzeHex);
+						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.BRONZEHEX);
 						break;
 					case "Silver":
-						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.silverHex);
+						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.SILVERHEX);
 						break;
 					case "Gold":
-						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.goldHex);
+						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.GOLDHEX);
 						break;
 					case "Platinum":
-						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.platHex);
+						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.PLATHEX);
 						break;
 					case "Diamond":
-						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.diamondHex);
+						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.DIAMONDHEX);
 						break;
 					case "Master":
-						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.masterHex);
+						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.MASTERHEX);
 						break;
 					case "Challenger":
-						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.challengerHex);
+						Player.Cells[4].Style.BackColor = ColorTranslator.FromHtml(MainForm.CHALLENGERHEX);
 						break;
 					default:
 						break;

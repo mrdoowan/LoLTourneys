@@ -67,15 +67,61 @@
 			this.RolesPlay = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.RankPlay = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.button_SaveTeamTxt = new System.Windows.Forms.Button();
 			this.button_LoadTeams = new System.Windows.Forms.Button();
-			this.label_Version = new System.Windows.Forms.Label();
+			this.tabPage4 = new System.Windows.Forms.TabPage();
+			this.groupBox3 = new System.Windows.Forms.GroupBox();
+			this.button_SaveComp = new System.Windows.Forms.Button();
+			this.button_LoadComp = new System.Windows.Forms.Button();
+			this.button_GenStats = new System.Windows.Forms.Button();
+			this.button_Next = new System.Windows.Forms.Button();
+			this.button_Prev = new System.Windows.Forms.Button();
+			this.comboBox_Role4 = new System.Windows.Forms.ComboBox();
+			this.comboBox_Name4 = new System.Windows.Forms.ComboBox();
+			this.label_Champ4 = new System.Windows.Forms.Label();
+			this.comboBox_Role3 = new System.Windows.Forms.ComboBox();
+			this.comboBox_Name3 = new System.Windows.Forms.ComboBox();
+			this.label_Champ3 = new System.Windows.Forms.Label();
+			this.comboBox_Role2 = new System.Windows.Forms.ComboBox();
+			this.comboBox_Name2 = new System.Windows.Forms.ComboBox();
+			this.label_Champ2 = new System.Windows.Forms.Label();
+			this.comboBox_Role1 = new System.Windows.Forms.ComboBox();
+			this.comboBox_Name1 = new System.Windows.Forms.ComboBox();
+			this.label_Champ1 = new System.Windows.Forms.Label();
+			this.comboBox_Role9 = new System.Windows.Forms.ComboBox();
+			this.comboBox_Name9 = new System.Windows.Forms.ComboBox();
+			this.label_Champ9 = new System.Windows.Forms.Label();
+			this.comboBox_Role8 = new System.Windows.Forms.ComboBox();
+			this.comboBox_Name8 = new System.Windows.Forms.ComboBox();
+			this.label_Champ8 = new System.Windows.Forms.Label();
+			this.comboBox_Role7 = new System.Windows.Forms.ComboBox();
+			this.comboBox_Name7 = new System.Windows.Forms.ComboBox();
+			this.label_Champ7 = new System.Windows.Forms.Label();
+			this.comboBox_Role6 = new System.Windows.Forms.ComboBox();
+			this.comboBox_Name6 = new System.Windows.Forms.ComboBox();
+			this.label_Champ6 = new System.Windows.Forms.Label();
+			this.comboBox_Role5 = new System.Windows.Forms.ComboBox();
+			this.comboBox_Name5 = new System.Windows.Forms.ComboBox();
+			this.label_Champ5 = new System.Windows.Forms.Label();
+			this.comboBox_Role0 = new System.Windows.Forms.ComboBox();
+			this.comboBox_Name0 = new System.Windows.Forms.ComboBox();
+			this.label_Champ0 = new System.Windows.Forms.Label();
+			this.label7 = new System.Windows.Forms.Label();
+			this.label6 = new System.Windows.Forms.Label();
+			this.label_ID = new System.Windows.Forms.Label();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
+			this.label_NamesLoad = new System.Windows.Forms.Label();
+			this.label_MatchLoad = new System.Windows.Forms.Label();
+			this.button_GenNames = new System.Windows.Forms.Button();
+			this.button_LoadNames = new System.Windows.Forms.Button();
+			this.label4 = new System.Windows.Forms.Label();
+			this.comboBox_Region = new System.Windows.Forms.ComboBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.textBox_APIKey = new System.Windows.Forms.TextBox();
-			this.button_GenStats = new System.Windows.Forms.Button();
-			this.button_HelpStats = new System.Windows.Forms.Button();
-			this.checkBox_ProdKey = new System.Windows.Forms.CheckBox();
+			this.button_LoadMatches = new System.Windows.Forms.Button();
+			this.label_Version = new System.Windows.Forms.Label();
 			this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+			this.label_StatsMsg = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
 			this.tabControl1.SuspendLayout();
@@ -90,6 +136,8 @@
 			this.groupBox2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView_Team)).BeginInit();
 			this.groupBox1.SuspendLayout();
+			this.tabPage4.SuspendLayout();
+			this.groupBox3.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -128,6 +176,7 @@
 			this.tabControl1.Controls.Add(this.tabPage1);
 			this.tabControl1.Controls.Add(this.tabPage2);
 			this.tabControl1.Controls.Add(this.tabPage3);
+			this.tabControl1.Controls.Add(this.tabPage4);
 			this.tabControl1.Location = new System.Drawing.Point(12, 150);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
@@ -404,14 +453,13 @@
 			// 
 			// tabPage3
 			// 
-			this.tabPage3.Controls.Add(this.groupBox4);
 			this.tabPage3.Controls.Add(this.groupBox2);
 			this.tabPage3.Controls.Add(this.groupBox1);
 			this.tabPage3.Location = new System.Drawing.Point(4, 22);
 			this.tabPage3.Name = "tabPage3";
 			this.tabPage3.Size = new System.Drawing.Size(629, 373);
 			this.tabPage3.TabIndex = 2;
-			this.tabPage3.Text = "Teams / Stats";
+			this.tabPage3.Text = "Teams";
 			this.tabPage3.UseVisualStyleBackColor = true;
 			// 
 			// groupBox2
@@ -506,13 +554,24 @@
 			// 
 			// groupBox1
 			// 
+			this.groupBox1.Controls.Add(this.button_SaveTeamTxt);
 			this.groupBox1.Controls.Add(this.button_LoadTeams);
 			this.groupBox1.Location = new System.Drawing.Point(3, 3);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(623, 53);
 			this.groupBox1.TabIndex = 0;
 			this.groupBox1.TabStop = false;
-			this.groupBox1.Text = "Load Teams";
+			this.groupBox1.Text = "Export/Import Team";
+			// 
+			// button_SaveTeamTxt
+			// 
+			this.button_SaveTeamTxt.Location = new System.Drawing.Point(87, 19);
+			this.button_SaveTeamTxt.Name = "button_SaveTeamTxt";
+			this.button_SaveTeamTxt.Size = new System.Drawing.Size(75, 23);
+			this.button_SaveTeamTxt.TabIndex = 2;
+			this.button_SaveTeamTxt.Text = "Save .txt";
+			this.button_SaveTeamTxt.UseVisualStyleBackColor = true;
+			this.button_SaveTeamTxt.Click += new System.EventHandler(this.button_SaveTeamTxt_Click);
 			// 
 			// button_LoadTeams
 			// 
@@ -524,74 +583,593 @@
 			this.button_LoadTeams.UseVisualStyleBackColor = true;
 			this.button_LoadTeams.Click += new System.EventHandler(this.button_LoadTeams_Click);
 			// 
-			// label_Version
+			// tabPage4
 			// 
-			this.label_Version.Location = new System.Drawing.Point(12, 548);
-			this.label_Version.Name = "label_Version";
-			this.label_Version.Size = new System.Drawing.Size(633, 23);
-			this.label_Version.TabIndex = 5;
-			this.label_Version.Text = "VERSION MESSAGE";
-			this.label_Version.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.tabPage4.Controls.Add(this.groupBox3);
+			this.tabPage4.Controls.Add(this.groupBox4);
+			this.tabPage4.Location = new System.Drawing.Point(4, 22);
+			this.tabPage4.Name = "tabPage4";
+			this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage4.Size = new System.Drawing.Size(629, 373);
+			this.tabPage4.TabIndex = 3;
+			this.tabPage4.Text = "Stats";
+			this.tabPage4.UseVisualStyleBackColor = true;
+			// 
+			// groupBox3
+			// 
+			this.groupBox3.Controls.Add(this.button_SaveComp);
+			this.groupBox3.Controls.Add(this.button_LoadComp);
+			this.groupBox3.Controls.Add(this.button_GenStats);
+			this.groupBox3.Controls.Add(this.button_Next);
+			this.groupBox3.Controls.Add(this.button_Prev);
+			this.groupBox3.Controls.Add(this.comboBox_Role4);
+			this.groupBox3.Controls.Add(this.comboBox_Name4);
+			this.groupBox3.Controls.Add(this.label_Champ4);
+			this.groupBox3.Controls.Add(this.comboBox_Role3);
+			this.groupBox3.Controls.Add(this.comboBox_Name3);
+			this.groupBox3.Controls.Add(this.label_Champ3);
+			this.groupBox3.Controls.Add(this.comboBox_Role2);
+			this.groupBox3.Controls.Add(this.comboBox_Name2);
+			this.groupBox3.Controls.Add(this.label_Champ2);
+			this.groupBox3.Controls.Add(this.comboBox_Role1);
+			this.groupBox3.Controls.Add(this.comboBox_Name1);
+			this.groupBox3.Controls.Add(this.label_Champ1);
+			this.groupBox3.Controls.Add(this.comboBox_Role9);
+			this.groupBox3.Controls.Add(this.comboBox_Name9);
+			this.groupBox3.Controls.Add(this.label_Champ9);
+			this.groupBox3.Controls.Add(this.comboBox_Role8);
+			this.groupBox3.Controls.Add(this.comboBox_Name8);
+			this.groupBox3.Controls.Add(this.label_Champ8);
+			this.groupBox3.Controls.Add(this.comboBox_Role7);
+			this.groupBox3.Controls.Add(this.comboBox_Name7);
+			this.groupBox3.Controls.Add(this.label_Champ7);
+			this.groupBox3.Controls.Add(this.comboBox_Role6);
+			this.groupBox3.Controls.Add(this.comboBox_Name6);
+			this.groupBox3.Controls.Add(this.label_Champ6);
+			this.groupBox3.Controls.Add(this.comboBox_Role5);
+			this.groupBox3.Controls.Add(this.comboBox_Name5);
+			this.groupBox3.Controls.Add(this.label_Champ5);
+			this.groupBox3.Controls.Add(this.comboBox_Role0);
+			this.groupBox3.Controls.Add(this.comboBox_Name0);
+			this.groupBox3.Controls.Add(this.label_Champ0);
+			this.groupBox3.Controls.Add(this.label7);
+			this.groupBox3.Controls.Add(this.label6);
+			this.groupBox3.Controls.Add(this.label_ID);
+			this.groupBox3.Location = new System.Drawing.Point(3, 92);
+			this.groupBox3.Name = "groupBox3";
+			this.groupBox3.Size = new System.Drawing.Size(623, 275);
+			this.groupBox3.TabIndex = 5;
+			this.groupBox3.TabStop = false;
+			this.groupBox3.Text = "Summoner Names";
+			// 
+			// button_SaveComp
+			// 
+			this.button_SaveComp.Location = new System.Drawing.Point(116, 246);
+			this.button_SaveComp.Name = "button_SaveComp";
+			this.button_SaveComp.Size = new System.Drawing.Size(102, 23);
+			this.button_SaveComp.TabIndex = 49;
+			this.button_SaveComp.Text = "Save Compilation";
+			this.button_SaveComp.UseVisualStyleBackColor = true;
+			this.button_SaveComp.Click += new System.EventHandler(this.button_SaveComp_Click);
+			// 
+			// button_LoadComp
+			// 
+			this.button_LoadComp.Location = new System.Drawing.Point(9, 246);
+			this.button_LoadComp.Name = "button_LoadComp";
+			this.button_LoadComp.Size = new System.Drawing.Size(102, 23);
+			this.button_LoadComp.TabIndex = 12;
+			this.button_LoadComp.Text = "Load Compilation";
+			this.button_LoadComp.UseVisualStyleBackColor = true;
+			this.button_LoadComp.Click += new System.EventHandler(this.button_LoadComp_Click);
+			// 
+			// button_GenStats
+			// 
+			this.button_GenStats.Location = new System.Drawing.Point(223, 246);
+			this.button_GenStats.Name = "button_GenStats";
+			this.button_GenStats.Size = new System.Drawing.Size(177, 23);
+			this.button_GenStats.TabIndex = 48;
+			this.button_GenStats.Text = "Generate Stats";
+			this.button_GenStats.UseVisualStyleBackColor = true;
+			this.button_GenStats.Click += new System.EventHandler(this.button_GenStats_Click);
+			// 
+			// button_Next
+			// 
+			this.button_Next.Enabled = false;
+			this.button_Next.Location = new System.Drawing.Point(316, 219);
+			this.button_Next.Name = "button_Next";
+			this.button_Next.Size = new System.Drawing.Size(35, 23);
+			this.button_Next.TabIndex = 47;
+			this.button_Next.Text = ">";
+			this.button_Next.UseVisualStyleBackColor = true;
+			this.button_Next.Click += new System.EventHandler(this.button_Next_Click);
+			// 
+			// button_Prev
+			// 
+			this.button_Prev.Enabled = false;
+			this.button_Prev.Location = new System.Drawing.Point(275, 219);
+			this.button_Prev.Name = "button_Prev";
+			this.button_Prev.Size = new System.Drawing.Size(35, 23);
+			this.button_Prev.TabIndex = 46;
+			this.button_Prev.Text = "<";
+			this.button_Prev.UseVisualStyleBackColor = true;
+			this.button_Prev.Click += new System.EventHandler(this.button_Prev_Click);
+			// 
+			// comboBox_Role4
+			// 
+			this.comboBox_Role4.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox_Role4.FormattingEnabled = true;
+			this.comboBox_Role4.Items.AddRange(new object[] {
+            "TOP",
+            "JNG",
+            "MID",
+            "ADC",
+            "SUP"});
+			this.comboBox_Role4.Location = new System.Drawing.Point(9, 187);
+			this.comboBox_Role4.Name = "comboBox_Role4";
+			this.comboBox_Role4.Size = new System.Drawing.Size(64, 21);
+			this.comboBox_Role4.TabIndex = 44;
+			// 
+			// comboBox_Name4
+			// 
+			this.comboBox_Name4.FormattingEnabled = true;
+			this.comboBox_Name4.Location = new System.Drawing.Point(79, 187);
+			this.comboBox_Name4.Name = "comboBox_Name4";
+			this.comboBox_Name4.Size = new System.Drawing.Size(138, 21);
+			this.comboBox_Name4.TabIndex = 43;
+			// 
+			// label_Champ4
+			// 
+			this.label_Champ4.Location = new System.Drawing.Point(223, 186);
+			this.label_Champ4.Name = "label_Champ4";
+			this.label_Champ4.Size = new System.Drawing.Size(87, 21);
+			this.label_Champ4.TabIndex = 42;
+			this.label_Champ4.Text = "CHAMP4";
+			this.label_Champ4.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// comboBox_Role3
+			// 
+			this.comboBox_Role3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox_Role3.FormattingEnabled = true;
+			this.comboBox_Role3.Items.AddRange(new object[] {
+            "TOP",
+            "JNG",
+            "MID",
+            "ADC",
+            "SUP"});
+			this.comboBox_Role3.Location = new System.Drawing.Point(9, 160);
+			this.comboBox_Role3.Name = "comboBox_Role3";
+			this.comboBox_Role3.Size = new System.Drawing.Size(64, 21);
+			this.comboBox_Role3.TabIndex = 41;
+			// 
+			// comboBox_Name3
+			// 
+			this.comboBox_Name3.FormattingEnabled = true;
+			this.comboBox_Name3.Location = new System.Drawing.Point(79, 160);
+			this.comboBox_Name3.Name = "comboBox_Name3";
+			this.comboBox_Name3.Size = new System.Drawing.Size(138, 21);
+			this.comboBox_Name3.TabIndex = 40;
+			// 
+			// label_Champ3
+			// 
+			this.label_Champ3.Location = new System.Drawing.Point(223, 159);
+			this.label_Champ3.Name = "label_Champ3";
+			this.label_Champ3.Size = new System.Drawing.Size(87, 21);
+			this.label_Champ3.TabIndex = 39;
+			this.label_Champ3.Text = "CHAMP3";
+			this.label_Champ3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// comboBox_Role2
+			// 
+			this.comboBox_Role2.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox_Role2.FormattingEnabled = true;
+			this.comboBox_Role2.Items.AddRange(new object[] {
+            "TOP",
+            "JNG",
+            "MID",
+            "ADC",
+            "SUP"});
+			this.comboBox_Role2.Location = new System.Drawing.Point(9, 133);
+			this.comboBox_Role2.Name = "comboBox_Role2";
+			this.comboBox_Role2.Size = new System.Drawing.Size(64, 21);
+			this.comboBox_Role2.TabIndex = 38;
+			// 
+			// comboBox_Name2
+			// 
+			this.comboBox_Name2.FormattingEnabled = true;
+			this.comboBox_Name2.Location = new System.Drawing.Point(79, 133);
+			this.comboBox_Name2.Name = "comboBox_Name2";
+			this.comboBox_Name2.Size = new System.Drawing.Size(138, 21);
+			this.comboBox_Name2.TabIndex = 37;
+			// 
+			// label_Champ2
+			// 
+			this.label_Champ2.Location = new System.Drawing.Point(223, 132);
+			this.label_Champ2.Name = "label_Champ2";
+			this.label_Champ2.Size = new System.Drawing.Size(87, 21);
+			this.label_Champ2.TabIndex = 36;
+			this.label_Champ2.Text = "CHAMP2";
+			this.label_Champ2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// comboBox_Role1
+			// 
+			this.comboBox_Role1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox_Role1.FormattingEnabled = true;
+			this.comboBox_Role1.Items.AddRange(new object[] {
+            "TOP",
+            "JNG",
+            "MID",
+            "ADC",
+            "SUP"});
+			this.comboBox_Role1.Location = new System.Drawing.Point(9, 106);
+			this.comboBox_Role1.Name = "comboBox_Role1";
+			this.comboBox_Role1.Size = new System.Drawing.Size(64, 21);
+			this.comboBox_Role1.TabIndex = 35;
+			// 
+			// comboBox_Name1
+			// 
+			this.comboBox_Name1.FormattingEnabled = true;
+			this.comboBox_Name1.Location = new System.Drawing.Point(79, 106);
+			this.comboBox_Name1.Name = "comboBox_Name1";
+			this.comboBox_Name1.Size = new System.Drawing.Size(138, 21);
+			this.comboBox_Name1.TabIndex = 34;
+			// 
+			// label_Champ1
+			// 
+			this.label_Champ1.Location = new System.Drawing.Point(223, 105);
+			this.label_Champ1.Name = "label_Champ1";
+			this.label_Champ1.Size = new System.Drawing.Size(87, 21);
+			this.label_Champ1.TabIndex = 33;
+			this.label_Champ1.Text = "CHAMP1";
+			this.label_Champ1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// comboBox_Role9
+			// 
+			this.comboBox_Role9.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox_Role9.FormattingEnabled = true;
+			this.comboBox_Role9.Items.AddRange(new object[] {
+            "TOP",
+            "JNG",
+            "MID",
+            "ADC",
+            "SUP"});
+			this.comboBox_Role9.Location = new System.Drawing.Point(550, 187);
+			this.comboBox_Role9.Name = "comboBox_Role9";
+			this.comboBox_Role9.Size = new System.Drawing.Size(64, 21);
+			this.comboBox_Role9.TabIndex = 32;
+			// 
+			// comboBox_Name9
+			// 
+			this.comboBox_Name9.FormattingEnabled = true;
+			this.comboBox_Name9.Location = new System.Drawing.Point(406, 187);
+			this.comboBox_Name9.Name = "comboBox_Name9";
+			this.comboBox_Name9.Size = new System.Drawing.Size(138, 21);
+			this.comboBox_Name9.TabIndex = 31;
+			// 
+			// label_Champ9
+			// 
+			this.label_Champ9.Location = new System.Drawing.Point(313, 187);
+			this.label_Champ9.Name = "label_Champ9";
+			this.label_Champ9.Size = new System.Drawing.Size(87, 21);
+			this.label_Champ9.TabIndex = 30;
+			this.label_Champ9.Text = "CHAMP9";
+			this.label_Champ9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// comboBox_Role8
+			// 
+			this.comboBox_Role8.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox_Role8.FormattingEnabled = true;
+			this.comboBox_Role8.Items.AddRange(new object[] {
+            "TOP",
+            "JNG",
+            "MID",
+            "ADC",
+            "SUP"});
+			this.comboBox_Role8.Location = new System.Drawing.Point(550, 160);
+			this.comboBox_Role8.Name = "comboBox_Role8";
+			this.comboBox_Role8.Size = new System.Drawing.Size(64, 21);
+			this.comboBox_Role8.TabIndex = 29;
+			// 
+			// comboBox_Name8
+			// 
+			this.comboBox_Name8.FormattingEnabled = true;
+			this.comboBox_Name8.Location = new System.Drawing.Point(406, 160);
+			this.comboBox_Name8.Name = "comboBox_Name8";
+			this.comboBox_Name8.Size = new System.Drawing.Size(138, 21);
+			this.comboBox_Name8.TabIndex = 28;
+			// 
+			// label_Champ8
+			// 
+			this.label_Champ8.Location = new System.Drawing.Point(313, 160);
+			this.label_Champ8.Name = "label_Champ8";
+			this.label_Champ8.Size = new System.Drawing.Size(87, 21);
+			this.label_Champ8.TabIndex = 27;
+			this.label_Champ8.Text = "CHAMP8";
+			this.label_Champ8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// comboBox_Role7
+			// 
+			this.comboBox_Role7.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox_Role7.FormattingEnabled = true;
+			this.comboBox_Role7.Items.AddRange(new object[] {
+            "TOP",
+            "JNG",
+            "MID",
+            "ADC",
+            "SUP"});
+			this.comboBox_Role7.Location = new System.Drawing.Point(550, 133);
+			this.comboBox_Role7.Name = "comboBox_Role7";
+			this.comboBox_Role7.Size = new System.Drawing.Size(64, 21);
+			this.comboBox_Role7.TabIndex = 26;
+			// 
+			// comboBox_Name7
+			// 
+			this.comboBox_Name7.FormattingEnabled = true;
+			this.comboBox_Name7.Location = new System.Drawing.Point(406, 133);
+			this.comboBox_Name7.Name = "comboBox_Name7";
+			this.comboBox_Name7.Size = new System.Drawing.Size(138, 21);
+			this.comboBox_Name7.TabIndex = 25;
+			// 
+			// label_Champ7
+			// 
+			this.label_Champ7.Location = new System.Drawing.Point(313, 133);
+			this.label_Champ7.Name = "label_Champ7";
+			this.label_Champ7.Size = new System.Drawing.Size(87, 21);
+			this.label_Champ7.TabIndex = 24;
+			this.label_Champ7.Text = "CHAMP7";
+			this.label_Champ7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// comboBox_Role6
+			// 
+			this.comboBox_Role6.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox_Role6.FormattingEnabled = true;
+			this.comboBox_Role6.Items.AddRange(new object[] {
+            "TOP",
+            "JNG",
+            "MID",
+            "ADC",
+            "SUP"});
+			this.comboBox_Role6.Location = new System.Drawing.Point(550, 106);
+			this.comboBox_Role6.Name = "comboBox_Role6";
+			this.comboBox_Role6.Size = new System.Drawing.Size(64, 21);
+			this.comboBox_Role6.TabIndex = 23;
+			// 
+			// comboBox_Name6
+			// 
+			this.comboBox_Name6.FormattingEnabled = true;
+			this.comboBox_Name6.Location = new System.Drawing.Point(406, 106);
+			this.comboBox_Name6.Name = "comboBox_Name6";
+			this.comboBox_Name6.Size = new System.Drawing.Size(138, 21);
+			this.comboBox_Name6.TabIndex = 22;
+			// 
+			// label_Champ6
+			// 
+			this.label_Champ6.Location = new System.Drawing.Point(313, 106);
+			this.label_Champ6.Name = "label_Champ6";
+			this.label_Champ6.Size = new System.Drawing.Size(87, 21);
+			this.label_Champ6.TabIndex = 21;
+			this.label_Champ6.Text = "CHAMP6";
+			this.label_Champ6.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// comboBox_Role5
+			// 
+			this.comboBox_Role5.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox_Role5.FormattingEnabled = true;
+			this.comboBox_Role5.Items.AddRange(new object[] {
+            "TOP",
+            "JNG",
+            "MID",
+            "ADC",
+            "SUP"});
+			this.comboBox_Role5.Location = new System.Drawing.Point(550, 79);
+			this.comboBox_Role5.Name = "comboBox_Role5";
+			this.comboBox_Role5.Size = new System.Drawing.Size(64, 21);
+			this.comboBox_Role5.TabIndex = 20;
+			// 
+			// comboBox_Name5
+			// 
+			this.comboBox_Name5.FormattingEnabled = true;
+			this.comboBox_Name5.Location = new System.Drawing.Point(406, 79);
+			this.comboBox_Name5.Name = "comboBox_Name5";
+			this.comboBox_Name5.Size = new System.Drawing.Size(138, 21);
+			this.comboBox_Name5.TabIndex = 19;
+			// 
+			// label_Champ5
+			// 
+			this.label_Champ5.Location = new System.Drawing.Point(313, 79);
+			this.label_Champ5.Name = "label_Champ5";
+			this.label_Champ5.Size = new System.Drawing.Size(87, 21);
+			this.label_Champ5.TabIndex = 18;
+			this.label_Champ5.Text = "CHAMP5";
+			this.label_Champ5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// comboBox_Role0
+			// 
+			this.comboBox_Role0.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox_Role0.FormattingEnabled = true;
+			this.comboBox_Role0.Items.AddRange(new object[] {
+            "TOP",
+            "JNG",
+            "MID",
+            "ADC",
+            "SUP"});
+			this.comboBox_Role0.Location = new System.Drawing.Point(9, 79);
+			this.comboBox_Role0.Name = "comboBox_Role0";
+			this.comboBox_Role0.Size = new System.Drawing.Size(64, 21);
+			this.comboBox_Role0.TabIndex = 5;
+			// 
+			// comboBox_Name0
+			// 
+			this.comboBox_Name0.FormattingEnabled = true;
+			this.comboBox_Name0.Location = new System.Drawing.Point(79, 79);
+			this.comboBox_Name0.Name = "comboBox_Name0";
+			this.comboBox_Name0.Size = new System.Drawing.Size(138, 21);
+			this.comboBox_Name0.TabIndex = 4;
+			// 
+			// label_Champ0
+			// 
+			this.label_Champ0.Location = new System.Drawing.Point(223, 78);
+			this.label_Champ0.Name = "label_Champ0";
+			this.label_Champ0.Size = new System.Drawing.Size(87, 21);
+			this.label_Champ0.TabIndex = 3;
+			this.label_Champ0.Text = "CHAMP0";
+			this.label_Champ0.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			// 
+			// label7
+			// 
+			this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F);
+			this.label7.ForeColor = System.Drawing.Color.Red;
+			this.label7.Location = new System.Drawing.Point(313, 46);
+			this.label7.Name = "label7";
+			this.label7.Size = new System.Drawing.Size(307, 30);
+			this.label7.TabIndex = 2;
+			this.label7.Text = "RED TEAM";
+			this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// label6
+			// 
+			this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F);
+			this.label6.ForeColor = System.Drawing.Color.Blue;
+			this.label6.Location = new System.Drawing.Point(3, 46);
+			this.label6.Name = "label6";
+			this.label6.Size = new System.Drawing.Size(304, 30);
+			this.label6.TabIndex = 1;
+			this.label6.Text = "BLUE TEAM";
+			this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+			// 
+			// label_ID
+			// 
+			this.label_ID.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.25F);
+			this.label_ID.Location = new System.Drawing.Point(3, 16);
+			this.label_ID.Name = "label_ID";
+			this.label_ID.Size = new System.Drawing.Size(617, 30);
+			this.label_ID.TabIndex = 0;
+			this.label_ID.Text = "GAME #: MATCH ID";
+			this.label_ID.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// groupBox4
 			// 
-			this.groupBox4.Controls.Add(this.checkBox_ProdKey);
-			this.groupBox4.Controls.Add(this.button_HelpStats);
+			this.groupBox4.Controls.Add(this.label_NamesLoad);
+			this.groupBox4.Controls.Add(this.label_MatchLoad);
+			this.groupBox4.Controls.Add(this.button_GenNames);
+			this.groupBox4.Controls.Add(this.button_LoadNames);
+			this.groupBox4.Controls.Add(this.label4);
+			this.groupBox4.Controls.Add(this.comboBox_Region);
 			this.groupBox4.Controls.Add(this.label5);
 			this.groupBox4.Controls.Add(this.textBox_APIKey);
-			this.groupBox4.Controls.Add(this.button_GenStats);
-			this.groupBox4.Location = new System.Drawing.Point(3, 284);
+			this.groupBox4.Controls.Add(this.button_LoadMatches);
+			this.groupBox4.Location = new System.Drawing.Point(3, 6);
 			this.groupBox4.Name = "groupBox4";
 			this.groupBox4.Size = new System.Drawing.Size(623, 80);
-			this.groupBox4.TabIndex = 3;
+			this.groupBox4.TabIndex = 4;
 			this.groupBox4.TabStop = false;
-			this.groupBox4.Text = "Load Stats";
+			this.groupBox4.Text = "Load Stats (WORK IN PROGRESS)";
+			// 
+			// label_NamesLoad
+			// 
+			this.label_NamesLoad.ForeColor = System.Drawing.Color.DarkGreen;
+			this.label_NamesLoad.Location = new System.Drawing.Point(225, 53);
+			this.label_NamesLoad.Name = "label_NamesLoad";
+			this.label_NamesLoad.Size = new System.Drawing.Size(157, 23);
+			this.label_NamesLoad.TabIndex = 11;
+			this.label_NamesLoad.Text = "Names Loaded!";
+			this.label_NamesLoad.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.label_NamesLoad.Visible = false;
+			// 
+			// label_MatchLoad
+			// 
+			this.label_MatchLoad.ForeColor = System.Drawing.Color.DarkGreen;
+			this.label_MatchLoad.Location = new System.Drawing.Point(225, 18);
+			this.label_MatchLoad.Name = "label_MatchLoad";
+			this.label_MatchLoad.Size = new System.Drawing.Size(157, 23);
+			this.label_MatchLoad.TabIndex = 10;
+			this.label_MatchLoad.Text = "Matches Loaded!";
+			this.label_MatchLoad.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.label_MatchLoad.Visible = false;
+			// 
+			// button_GenNames
+			// 
+			this.button_GenNames.Location = new System.Drawing.Point(9, 19);
+			this.button_GenNames.Name = "button_GenNames";
+			this.button_GenNames.Size = new System.Drawing.Size(102, 56);
+			this.button_GenNames.TabIndex = 9;
+			this.button_GenNames.Text = "Compiling Teams and Names";
+			this.button_GenNames.UseVisualStyleBackColor = true;
+			this.button_GenNames.Click += new System.EventHandler(this.button_GenNames_Click);
+			// 
+			// button_LoadNames
+			// 
+			this.button_LoadNames.Location = new System.Drawing.Point(117, 54);
+			this.button_LoadNames.Name = "button_LoadNames";
+			this.button_LoadNames.Size = new System.Drawing.Size(102, 21);
+			this.button_LoadNames.TabIndex = 8;
+			this.button_LoadNames.Text = "Load .txt Names";
+			this.button_LoadNames.UseVisualStyleBackColor = true;
+			this.button_LoadNames.Click += new System.EventHandler(this.button_LoadNames_Click);
+			// 
+			// label4
+			// 
+			this.label4.Location = new System.Drawing.Point(387, 53);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(49, 20);
+			this.label4.TabIndex = 7;
+			this.label4.Text = "Region:";
+			this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+			// 
+			// comboBox_Region
+			// 
+			this.comboBox_Region.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBox_Region.FormattingEnabled = true;
+			this.comboBox_Region.Items.AddRange(new object[] {
+            "NA",
+            "BR",
+            "EUNE",
+            "EUW",
+            "JP",
+            "KR",
+            "LAN",
+            "LAS",
+            "OCE",
+            "RU",
+            "TR"});
+			this.comboBox_Region.Location = new System.Drawing.Point(442, 55);
+			this.comboBox_Region.Name = "comboBox_Region";
+			this.comboBox_Region.Size = new System.Drawing.Size(121, 21);
+			this.comboBox_Region.TabIndex = 6;
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(207, 19);
+			this.label5.Location = new System.Drawing.Point(388, 19);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(102, 20);
+			this.label5.Size = new System.Drawing.Size(48, 20);
 			this.label5.TabIndex = 2;
 			this.label5.Text = "API Key:";
 			this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// textBox_APIKey
 			// 
-			this.textBox_APIKey.Location = new System.Drawing.Point(315, 19);
+			this.textBox_APIKey.Location = new System.Drawing.Point(442, 19);
 			this.textBox_APIKey.Name = "textBox_APIKey";
-			this.textBox_APIKey.Size = new System.Drawing.Size(294, 20);
+			this.textBox_APIKey.Size = new System.Drawing.Size(174, 20);
 			this.textBox_APIKey.TabIndex = 2;
 			// 
-			// button_GenStats
+			// button_LoadMatches
 			// 
-			this.button_GenStats.Location = new System.Drawing.Point(6, 19);
-			this.button_GenStats.Name = "button_GenStats";
-			this.button_GenStats.Size = new System.Drawing.Size(93, 55);
-			this.button_GenStats.TabIndex = 1;
-			this.button_GenStats.Text = "Load .txt Games\r\nGenerate Stats";
-			this.button_GenStats.UseVisualStyleBackColor = true;
-			this.button_GenStats.Click += new System.EventHandler(this.button_GenStats_Click);
+			this.button_LoadMatches.Location = new System.Drawing.Point(117, 20);
+			this.button_LoadMatches.Name = "button_LoadMatches";
+			this.button_LoadMatches.Size = new System.Drawing.Size(102, 21);
+			this.button_LoadMatches.TabIndex = 1;
+			this.button_LoadMatches.Text = "Load .txt Matches";
+			this.button_LoadMatches.UseVisualStyleBackColor = true;
+			this.button_LoadMatches.Click += new System.EventHandler(this.button_LoadMatches_Click);
 			// 
-			// button_HelpStats
+			// label_Version
 			// 
-			this.button_HelpStats.Location = new System.Drawing.Point(108, 19);
-			this.button_HelpStats.Name = "button_HelpStats";
-			this.button_HelpStats.Size = new System.Drawing.Size(93, 55);
-			this.button_HelpStats.TabIndex = 3;
-			this.button_HelpStats.Text = "Help: Format";
-			this.button_HelpStats.UseVisualStyleBackColor = true;
-			this.button_HelpStats.Click += new System.EventHandler(this.button_HelpStats_Click);
-			// 
-			// checkBox_ProdKey
-			// 
-			this.checkBox_ProdKey.Location = new System.Drawing.Point(210, 50);
-			this.checkBox_ProdKey.Name = "checkBox_ProdKey";
-			this.checkBox_ProdKey.Size = new System.Drawing.Size(107, 24);
-			this.checkBox_ProdKey.TabIndex = 4;
-			this.checkBox_ProdKey.Text = "Production Key?";
-			this.toolTip1.SetToolTip(this.checkBox_ProdKey, "Check if your API is Production approved by Riot");
-			this.checkBox_ProdKey.UseVisualStyleBackColor = true;
+			this.label_Version.Location = new System.Drawing.Point(329, 548);
+			this.label_Version.Name = "label_Version";
+			this.label_Version.Size = new System.Drawing.Size(316, 23);
+			this.label_Version.TabIndex = 5;
+			this.label_Version.Text = "VERSION MESSAGE";
+			this.label_Version.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
 			// 
 			// toolTip1
 			// 
@@ -599,17 +1177,31 @@
 			this.toolTip1.InitialDelay = 50;
 			this.toolTip1.ReshowDelay = 100;
 			// 
+			// label_StatsMsg
+			// 
+			this.label_StatsMsg.ForeColor = System.Drawing.Color.DarkGreen;
+			this.label_StatsMsg.Location = new System.Drawing.Point(12, 548);
+			this.label_StatsMsg.Name = "label_StatsMsg";
+			this.label_StatsMsg.Size = new System.Drawing.Size(311, 23);
+			this.label_StatsMsg.TabIndex = 6;
+			this.label_StatsMsg.Text = "Compiling Stats...";
+			this.label_StatsMsg.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.label_StatsMsg.Visible = false;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(661, 575);
+			this.Controls.Add(this.label_StatsMsg);
 			this.Controls.Add(this.label_Version);
 			this.Controls.Add(this.tabControl1);
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.pictureBox2);
 			this.Controls.Add(this.pictureBox1);
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+			this.MaximumSize = new System.Drawing.Size(677, 614);
+			this.MinimumSize = new System.Drawing.Size(677, 614);
 			this.Name = "MainForm";
 			this.Text = "League of Legends Balancer";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
@@ -629,6 +1221,8 @@
 			this.groupBox2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView_Team)).EndInit();
 			this.groupBox1.ResumeLayout(false);
+			this.tabPage4.ResumeLayout(false);
+			this.groupBox3.ResumeLayout(false);
 			this.groupBox4.ResumeLayout(false);
 			this.groupBox4.PerformLayout();
 			this.ResumeLayout(false);
@@ -679,13 +1273,59 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn Rank;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Value;
 		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.GroupBox groupBox4;
-		private System.Windows.Forms.Label label5;
-		private System.Windows.Forms.TextBox textBox_APIKey;
-		private System.Windows.Forms.Button button_GenStats;
-		private System.Windows.Forms.Button button_HelpStats;
-		private System.Windows.Forms.CheckBox checkBox_ProdKey;
 		private System.Windows.Forms.ToolTip toolTip1;
-	}
+        private System.Windows.Forms.Label label_StatsMsg;
+        private System.Windows.Forms.Button button_SaveTeamTxt;
+        private System.Windows.Forms.TabPage tabPage4;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Label label_NamesLoad;
+        private System.Windows.Forms.Label label_MatchLoad;
+        private System.Windows.Forms.Button button_GenNames;
+        private System.Windows.Forms.Button button_LoadNames;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.ComboBox comboBox_Region;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox textBox_APIKey;
+        private System.Windows.Forms.Button button_LoadMatches;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.Label label_ID;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.ComboBox comboBox_Role9;
+        private System.Windows.Forms.ComboBox comboBox_Name9;
+        private System.Windows.Forms.Label label_Champ9;
+        private System.Windows.Forms.ComboBox comboBox_Role8;
+        private System.Windows.Forms.ComboBox comboBox_Name8;
+        private System.Windows.Forms.Label label_Champ8;
+        private System.Windows.Forms.ComboBox comboBox_Role7;
+        private System.Windows.Forms.ComboBox comboBox_Name7;
+        private System.Windows.Forms.Label label_Champ7;
+        private System.Windows.Forms.ComboBox comboBox_Role6;
+        private System.Windows.Forms.ComboBox comboBox_Name6;
+        private System.Windows.Forms.Label label_Champ6;
+        private System.Windows.Forms.ComboBox comboBox_Role5;
+        private System.Windows.Forms.ComboBox comboBox_Name5;
+        private System.Windows.Forms.Label label_Champ5;
+        private System.Windows.Forms.ComboBox comboBox_Role0;
+        private System.Windows.Forms.ComboBox comboBox_Name0;
+        private System.Windows.Forms.Label label_Champ0;
+        private System.Windows.Forms.ComboBox comboBox_Role4;
+        private System.Windows.Forms.ComboBox comboBox_Name4;
+        private System.Windows.Forms.Label label_Champ4;
+        private System.Windows.Forms.ComboBox comboBox_Role3;
+        private System.Windows.Forms.ComboBox comboBox_Name3;
+        private System.Windows.Forms.Label label_Champ3;
+        private System.Windows.Forms.ComboBox comboBox_Role2;
+        private System.Windows.Forms.ComboBox comboBox_Name2;
+        private System.Windows.Forms.Label label_Champ2;
+        private System.Windows.Forms.ComboBox comboBox_Role1;
+        private System.Windows.Forms.ComboBox comboBox_Name1;
+        private System.Windows.Forms.Label label_Champ1;
+        private System.Windows.Forms.Button button_Next;
+        private System.Windows.Forms.Button button_Prev;
+        private System.Windows.Forms.Button button_GenStats;
+        private System.Windows.Forms.Button button_LoadComp;
+        private System.Windows.Forms.Button button_SaveComp;
+    }
 }
 
