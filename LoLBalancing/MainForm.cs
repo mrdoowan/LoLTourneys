@@ -146,23 +146,20 @@ namespace LoLBalancing
         public class StatsGame
         {
             public List<StatsPlayer> Players;
-            public int number { get; set; }
             public long gameID { get; set; }
             public int redTeamNum { get; set; }
             public int blueTeamNum { get; set; }
 
             // Default Constructor
-            public StatsGame(int num_, long ID_, int red_, int blue_) {
+            public StatsGame(long ID_, int red_, int blue_) {
                 Players = new List<StatsPlayer>();
-                number = num_;
                 gameID = ID_;
                 redTeamNum = red_;
                 blueTeamNum = blue_;
             }
         }
 
-        private int gameNum;
-        private int totalGames;
+        private int pageNumber;
         private List<List<string>> IGNs = new List<List<string>>();
         private List<StatsGame> statsGames = new List<StatsGame>();
 
@@ -975,7 +972,7 @@ namespace LoLBalancing
                     long ID = long.Parse(Details[0]);
                     int BlueTeamNum = int.Parse(Details[1]);
 					int RedTeamNum = int.Parse(Details[2]);
-					StatsGame parseGame = new StatsGame(i, ID, RedTeamNum, BlueTeamNum);
+					StatsGame parseGame = new StatsGame(ID, RedTeamNum, BlueTeamNum);
 					// Instantiate StatsPlayer class in
 					JObject match = json.getMatchJson(ID.ToString());
 					for (int j = 0; j < NUM_PLAYERS * 2; ++j) {
@@ -984,13 +981,14 @@ namespace LoLBalancing
 						string champName = champJson[champID]["name"].ToString();
 						string role = summJson[j]["timeline"]["role"].ToString();
 						string lane = summJson[j]["timeline"]["lane"].ToString();
-						if (role == "DUO_CARRY") { lane = "ADC"; }
-						else if (role == "DUO_SUPPORT") { lane = "SUPPORT"; }
-						parseGame.Players.Add(new StatsPlayer(champName, role));
+                        if (lane == "JUNGLE") { lane = "JNG"; }
+                        else if (lane == "MIDDLE") { lane = "MID"; }
+						else if (role == "DUO_CARRY") { lane = "ADC"; }
+						else if (role == "DUO_SUPPORT") { lane = "SUP"; }
+						parseGame.Players.Add(new StatsPlayer(champName, lane));
 					}
 					statsGames.Add(parseGame);
                 }
-                totalGames = matchRow.Length - 1;
             }
             catch (Exception e) {
                 MessageBox.Show("Error in parsing Matches at i=" + i + "\nReason: " + e.Message, 
@@ -1004,27 +1002,135 @@ namespace LoLBalancing
         // Save a preliminary .txt file
         private void button_GenNames_Click(object sender, EventArgs e) {
             if (string.IsNullOrWhiteSpace(matchTxt) || string.IsNullOrWhiteSpace(namesTxt)) {
-                MessageBox.Show("No matches or names loaded.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("No matches or names loaded.", "Error", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 			if (string.IsNullOrWhiteSpace(textBox_APIKey.Text)) {
-				MessageBox.Show("API Key not entered.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show("API Key not entered.", "Error", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
 			}
             Application.DoEvents();
             Cursor.Current = Cursors.WaitCursor;
             if (!parseNames_Txt()) { return; }
             if (!parseMatch_Txt()) { return; }
-			// Instantiate the first Page
-
+            // Instantiate the first Page
+            initialize_GUI_Page(0);
             Cursor.Current = Cursors.Default;
+            MessageBox.Show("Finished compilation!", "Done",
+                MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void button_Next_Click(object sender, EventArgs e) {
-
+            // Save Page into statsGames
+            save_GUI_Page();
+            // Initialize next Page
+            initialize_GUI_Page(pageNumber + 1);
         }
 
         private void button_Prev_Click(object sender, EventArgs e) {
+            // Save Page into statsGames
+            save_GUI_Page();
+            // Initialize next Page
+            initialize_GUI_Page(pageNumber - 1);
+        }
 
+        // Initialize the Page
+        // Sets pageNumber = pageNum
+        private void initialize_GUI_Page(int pageNum) {
+            try {
+                StatsGame page = statsGames[pageNum];
+                label_ID.Text = "GAME " + (pageNum + 1) + ": " + page.gameID;
+                int blueNum = page.blueTeamNum;
+                int redNum = page.redTeamNum;
+                label6.Text = "TEAM " + blueNum;
+                label7.Text = "TEAM " + redNum;
+                // 0
+                initialize_GUI_Player(page, 0, blueNum, comboBox_Role0,
+                    comboBox_Name0, label_Champ0);
+                // 1
+                initialize_GUI_Player(page, 1, blueNum, comboBox_Role1,
+                    comboBox_Name1, label_Champ1);
+                // 2
+                initialize_GUI_Player(page, 2, blueNum, comboBox_Role2,
+                    comboBox_Name2, label_Champ2);
+                // 3
+                initialize_GUI_Player(page, 3, blueNum, comboBox_Role3,
+                    comboBox_Name3, label_Champ3);
+                // 4
+                initialize_GUI_Player(page, 4, blueNum, comboBox_Role4,
+                    comboBox_Name4, label_Champ4);
+                // 5
+                initialize_GUI_Player(page, 5, redNum, comboBox_Role5,
+                    comboBox_Name5, label_Champ5);
+                // 6
+                initialize_GUI_Player(page, 6, redNum, comboBox_Role6,
+                    comboBox_Name6, label_Champ6);
+                // 7
+                initialize_GUI_Player(page, 7, redNum, comboBox_Role7,
+                    comboBox_Name7, label_Champ7);
+                // 8
+                initialize_GUI_Player(page, 8, redNum, comboBox_Role8,
+                    comboBox_Name8, label_Champ8);
+                // 9
+                initialize_GUI_Player(page, 9, redNum, comboBox_Role9,
+                    comboBox_Name9, label_Champ9);
+                // Disable either Last or Next
+                if (pageNum == 0) {
+                    button_Prev.Enabled = false;
+                    button_Next.Enabled = true;
+                }
+                else if (pageNum == statsGames.Count - 1) {
+                    button_Prev.Enabled = true;
+                    button_Next.Enabled = false;
+                }
+                else {
+                    button_Prev.Enabled = true;
+                    button_Next.Enabled = true;
+                }
+                // update pageNumber
+                pageNumber = pageNum;
+            }
+            catch (Exception e) {
+                MessageBox.Show("Your Match and Names files might be incorrect." + 
+                    "\nReason: " + e.Message, "Error", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
+        }
+
+        // Used to initialize of each Player in Stats
+        private void initialize_GUI_Player(StatsGame page, int playerNum,
+            int teamNum, ComboBox role, ComboBox names, Label champ) {
+            List<string> teamIGNs = IGNs[teamNum - 1];
+            role.Text = page.Players[playerNum].role;
+            for (int i = 0; i < teamIGNs.Count; ++i) {
+                names.Items.Add(teamIGNs[i]);
+            }
+            champ.Text = page.Players[playerNum].champ;
+        }
+
+        // Saves the exact Player into statsGames
+        private void save_Player_statsGames(StatsGame game, int playerNum,
+            ComboBox role, Label champ, ComboBox name) {
+            game.Players[playerNum].role = role.Text;
+            game.Players[playerNum].champ = champ.Text;
+            game.Players[playerNum].summoner = name.Text;
+        }
+
+        // Saves the entire page into statsGames
+        private void save_GUI_Page() {
+            StatsGame game = statsGames[pageNumber];
+            save_Player_statsGames(game, 0, comboBox_Role0, label_Champ0, comboBox_Name0);
+            save_Player_statsGames(game, 1, comboBox_Role1, label_Champ1, comboBox_Name1);
+            save_Player_statsGames(game, 2, comboBox_Role2, label_Champ2, comboBox_Name2);
+            save_Player_statsGames(game, 3, comboBox_Role3, label_Champ3, comboBox_Name3);
+            save_Player_statsGames(game, 4, comboBox_Role4, label_Champ4, comboBox_Name4);
+            save_Player_statsGames(game, 5, comboBox_Role5, label_Champ5, comboBox_Name5);
+            save_Player_statsGames(game, 6, comboBox_Role6, label_Champ6, comboBox_Name6);
+            save_Player_statsGames(game, 7, comboBox_Role7, label_Champ7, comboBox_Name7);
+            save_Player_statsGames(game, 8, comboBox_Role8, label_Champ8, comboBox_Name8);
+            save_Player_statsGames(game, 9, comboBox_Role9, label_Champ9, comboBox_Name9);
         }
 
         private void button_GenStats_Click(object sender, EventArgs e) {
@@ -1040,13 +1146,88 @@ namespace LoLBalancing
         }
 
         private void button_LoadComp_Click(object sender, EventArgs e) {
-
+            OpenFileDialog dlgFileOpen = new OpenFileDialog();
+            dlgFileOpen.Filter = "Text files (*.txt)|*.txt";
+            dlgFileOpen.Title = "Load Stats Compilation";
+            dlgFileOpen.RestoreDirectory = true;
+            if (dlgFileOpen.ShowDialog() == DialogResult.OK) {
+                try {
+                    StreamReader sr = new StreamReader(dlgFileOpen.FileName);
+                    string file = sr.ReadToEnd();
+                    // Names
+                    int endIndex = file.IndexOf("----MATCH_INFO----");
+                    namesTxt = file.Substring(0, endIndex);
+                    if (!parseNames_Txt()) { return; }
+                    // Matches
+                    statsGames.Clear();
+                    int begIndexMatches = file.IndexOf('\n', endIndex);
+                    string matchesString = file.Substring(begIndexMatches + 1);
+                    string[] matches = matchesString.Split('\n');
+                    for (int i = 0; i < matches.Length; ++i) {
+                        // ID BLUE RED
+                        string[] matchNums = matches[i].Split(' ');
+                        long ID = long.Parse(matchNums[0]);
+                        int blueNum = int.Parse(matchNums[1]);
+                        int redNum = int.Parse(matchNums[2]);
+                        StatsGame game = new StatsGame(ID, redNum, blueNum);
+                        // Onto the Players
+                        for (int j = 0; j < NUM_PLAYERS * 2; ++j) {
+                            ++i;
+                            string[] playerDets = matches[i].Split(' ');
+                            string role = playerDets[0];
+                            string champ = playerDets[1].Replace('+', ' ');
+                            string summoner = playerDets[2].TrimEnd('\n');
+                            StatsPlayer player = new StatsPlayer(champ, role, summoner);
+                            game.Players.Add(player);
+                        }
+                        statsGames.Add(game);
+                    }
+                    // Instantiate the first page
+                    initialize_GUI_Page(0);
+                }
+                catch (Exception ex) {
+                    MessageBox.Show("Error in loading Compilation.\nReason: " +
+                        ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
         private void button_SaveComp_Click(object sender, EventArgs e) {
-
+            if (!string.IsNullOrWhiteSpace(namesTxt) && statsGames.Count > 0) {
+                SaveFileDialog saveExcelDialog = new SaveFileDialog();
+                saveExcelDialog.Filter = "Text File (*.txt)|*.txt";
+                saveExcelDialog.Title = "Save Stats Compilation";
+                if (saveExcelDialog.ShowDialog() == DialogResult.OK) {
+                    try {
+                        StringBuilder sb = new StringBuilder();
+                        sb.Append(namesTxt + '\n');
+                        sb.Append("----MATCH_INFO----\n");
+                        for (int i = 0; i < statsGames.Count; ++i) {
+                            StatsGame game = statsGames[i];
+                            sb.Append(game.gameID + " " + game.blueTeamNum +
+                                " " + game.redTeamNum + '\n');
+                            for (int j = 0; j < game.Players.Count; ++j) {
+                                StatsPlayer player = game.Players[j];
+                                sb.Append(player.role + " ");
+                                string champSpace = player.champ.Replace(' ', '+');
+                                sb.Append(champSpace + " ");
+                                sb.Append(player.summoner + '\n');
+                            }
+                        }
+                        string filename = saveExcelDialog.FileName;
+                        File.WriteAllText(filename, sb.ToString().TrimEnd('\n'));
+                    }
+                    catch (Exception ex) {
+                        MessageBox.Show("Error in saving Compilation.\nReason: " +
+                            ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+            else {
+                MessageBox.Show("No record of compilation for the Teams.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
-
         #endregion
     }
 }
