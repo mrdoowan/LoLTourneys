@@ -26,7 +26,11 @@ namespace LoLBalancing
 
 		// Variables for upgrading
 		static private bool upgrading = false;
+<<<<<<< HEAD
 		private const string VERSION = "0.Shit.Alpha";
+=======
+		private const string version = "0.Shit.Alpha";
+>>>>>>> 95a8610616dbaa5c3713e2c5673034b3cc903915
 
 		// Color Codes for Ranks
 		public const string LEVELHEX = "#B4A7D6";
@@ -125,8 +129,13 @@ namespace LoLBalancing
 		private Random Rand = new Random();
 
         // Txt File strings
+<<<<<<< HEAD
         private string matchTxt;
         private string namesTxt;
+=======
+        private string MatchTxt;
+        private string NamesTxt;
+>>>>>>> 95a8610616dbaa5c3713e2c5673034b3cc903915
 
         // Stats Variables
         public class StatsPlayer
@@ -147,6 +156,7 @@ namespace LoLBalancing
         {
             public List<StatsPlayer> Players;
             public int number { get; set; }
+<<<<<<< HEAD
             public long gameID { get; set; }
             public int redTeamNum { get; set; }
             public int blueTeamNum { get; set; }
@@ -170,6 +180,31 @@ namespace LoLBalancing
 
         #region Helper Functions
 
+=======
+            public int gameID { get; set; }
+            public int redTeamNum { get; set; }
+            public int blueTeamNum { get; set; }
+
+            // Default Constructor
+            public StatsGame(int num_, int ID_, int red_, int blue_) {
+                Players = new List<StatsPlayer>();
+                number = num_;
+                gameID = ID_;
+                redTeamNum = red_;
+                blueTeamNum = blue_;
+            }
+        }
+
+        private int gameNum;
+        private int totalGames;
+        private List<List<string>> IGNs;
+        private List<StatsGame> statsGames = new List<StatsGame>();
+
+        #endregion
+
+        #region Helper Functions
+
+>>>>>>> 95a8610616dbaa5c3713e2c5673034b3cc903915
         private void Update_TotPlayers() {
 			int numPlayers = dataGridView_Players.Rows.Count;
 			label_Total.Text = "Total Players: " + numPlayers;
@@ -872,7 +907,11 @@ namespace LoLBalancing
             if (dlgFileOpen.ShowDialog() == DialogResult.OK) {
                 try {
                     StreamReader sr = new StreamReader(dlgFileOpen.FileName);
+<<<<<<< HEAD
                     matchTxt = sr.ReadToEnd();
+=======
+                    MatchTxt = sr.ReadToEnd();
+>>>>>>> 95a8610616dbaa5c3713e2c5673034b3cc903915
                     label_MatchLoad.Visible = true;
                 }
                 catch {
@@ -889,7 +928,11 @@ namespace LoLBalancing
             if (dlgFileOpen.ShowDialog() == DialogResult.OK) {
                 try {
                     StreamReader sr = new StreamReader(dlgFileOpen.FileName);
+<<<<<<< HEAD
                     namesTxt = sr.ReadToEnd();
+=======
+                    NamesTxt = sr.ReadToEnd();
+>>>>>>> 95a8610616dbaa5c3713e2c5673034b3cc903915
                     label_NamesLoad.Visible = true;
                 }
                 catch {
@@ -900,6 +943,7 @@ namespace LoLBalancing
 
         // Helper functions
         private bool parseNames_Txt() {
+<<<<<<< HEAD
 			IGNs.Clear();	// Clear List
 			try {
                 // ---------------------------------
@@ -912,19 +956,42 @@ namespace LoLBalancing
                     if (i == 0) {
                         // First Row should be a 1
                         if (int.Parse(namesRow[i]) != 1) {
+=======
+            try {
+                // ---------------------------------
+                // PARSE NAMES .TXT
+                // ---------------------------------
+                string[] NamesRow = NamesTxt.Split('\n');
+                int TeamNum = 1, NumCheck = 0;
+                List<string> TeamIGNs = new List<string>();
+                for (int i = 0; i < NamesRow.Length; ++i) {
+                    if (i == 0) {
+                        // First Row should be a 1
+                        if (int.Parse(NamesRow[i]) != 1) {
+>>>>>>> 95a8610616dbaa5c3713e2c5673034b3cc903915
                             MessageBox.Show("Wrong Format: 1 isn't the beginning of the Names .txt", "Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return false;
                         }
                     }
+<<<<<<< HEAD
                     else if (int.TryParse(namesRow[i], out numCheck)) {
                         // Reading Number
                         if (numCheck != teamNum + 1) {
+=======
+                    else if (int.TryParse(NamesRow[i], out NumCheck)) {
+                        // Reading Number
+                        if (NumCheck != TeamNum + 1) {
+>>>>>>> 95a8610616dbaa5c3713e2c5673034b3cc903915
                             MessageBox.Show("Team Numbers are not chronological.\nReload a correct Names .txt", "Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return false;
                         }
+<<<<<<< HEAD
                         else if (TeamIGNs.Count < NUM_PLAYERS) {
+=======
+                        else if (TeamIGNs.Count < 5) {
+>>>>>>> 95a8610616dbaa5c3713e2c5673034b3cc903915
                             MessageBox.Show("There are < 5 people in a Team.\nReload a correct Names .txt", "Error",
                                 MessageBoxButtons.OK, MessageBoxIcon.Error);
                             return false;
@@ -933,16 +1000,28 @@ namespace LoLBalancing
                             // We see a Number, so we add the List of Summoners
                             IGNs.Add(TeamIGNs);
                             TeamIGNs = new List<string>();
+<<<<<<< HEAD
                             teamNum++;
+=======
+                            TeamNum++;
+>>>>>>> 95a8610616dbaa5c3713e2c5673034b3cc903915
                         }
                     }
                     else {
                         // Reading String (Summoner)
+<<<<<<< HEAD
                         TeamIGNs.Add(namesRow[i]);
                     }
                 }
                 // Add the very last team.
                 if (TeamIGNs.Count < NUM_PLAYERS) {
+=======
+                        TeamIGNs.Add(NamesRow[i]);
+                    }
+                }
+                // Add the very last team.
+                if (TeamIGNs.Count < 5) {
+>>>>>>> 95a8610616dbaa5c3713e2c5673034b3cc903915
                     MessageBox.Show("There are < 5 people in a Team.\nReload a correct Names .txt", "Error",
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
@@ -952,8 +1031,13 @@ namespace LoLBalancing
                 }
             }
             catch (Exception e) {
+<<<<<<< HEAD
                 MessageBox.Show("Error in parsing Names \nReason: " + 
 					e.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+=======
+                MessageBox.Show("Error in parsing Names\nReason: " + e.Message, 
+                    "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+>>>>>>> 95a8610616dbaa5c3713e2c5673034b3cc903915
                 return false;
             }
             return true;
@@ -961,6 +1045,7 @@ namespace LoLBalancing
 
         // Helper function to Load Matches
         private bool parseMatch_Txt() {
+<<<<<<< HEAD
 			statsGames.Clear(); // Clear List first
 			RiotJson json = new RiotJson(comboBox_Region.Text, textBox_APIKey.Text);
 			int i = 0; // DEBUGGING
@@ -994,6 +1079,31 @@ namespace LoLBalancing
             }
             catch (Exception e) {
                 MessageBox.Show("Error in parsing Matches at i=" + i + "\nReason: " + e.Message, 
+=======
+            try {
+                // --------------- Retrieve Champion Information 
+                // (This will also authenticate the API Key)
+                string ChampJson = "";
+                using (var WC = new WebClient()) {
+                    ChampJson = WC.DownloadString("https://global.api.pvp.net/api/lol/static-data/" + comboBox_Region.Text +
+                        "/v1.2/champion?locale=en_US&dataById=true&api_key=" + textBox_APIKey.Text);
+                }
+                JToken Champs = JObject.Parse(ChampJson)["data"];
+                // --------------- Parsing MatchTxt
+                string[] matchRow = MatchTxt.Split('\n');
+                int numTeams = int.Parse(matchRow[0]);
+                for (int i = 1; i < matchRow.Length; ++i) {
+                    string[] Details = matchRow[i].Split(' ');
+                    int ID = int.Parse(Details[0]);
+                    int BlueTeamNum = int.Parse(Details[1]);
+                    int RedTeamNum = int.Parse(Details[2]);
+                }
+                totalGames = matchRow.Length - 1;
+                
+            }
+            catch (Exception e) {
+                MessageBox.Show("Error in parsing Matches\nReason: " + e.Message, 
+>>>>>>> 95a8610616dbaa5c3713e2c5673034b3cc903915
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
@@ -1003,6 +1113,7 @@ namespace LoLBalancing
         // Or otherwise known as the Compile Matches & Names
         // Save a preliminary .txt file
         private void button_GenNames_Click(object sender, EventArgs e) {
+<<<<<<< HEAD
             if (string.IsNullOrWhiteSpace(matchTxt) || string.IsNullOrWhiteSpace(namesTxt)) {
                 MessageBox.Show("No matches or names loaded.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -1010,12 +1121,21 @@ namespace LoLBalancing
 			if (string.IsNullOrWhiteSpace(textBox_APIKey.Text)) {
 				MessageBox.Show("API Key not entered.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
+=======
+            if (string.IsNullOrWhiteSpace(MatchTxt) || string.IsNullOrWhiteSpace(NamesTxt)) {
+                MessageBox.Show("No matches or names loaded.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+>>>>>>> 95a8610616dbaa5c3713e2c5673034b3cc903915
             Application.DoEvents();
             Cursor.Current = Cursors.WaitCursor;
             if (!parseNames_Txt()) { return; }
             if (!parseMatch_Txt()) { return; }
+<<<<<<< HEAD
 			// Instantiate the first Page
 
+=======
+>>>>>>> 95a8610616dbaa5c3713e2c5673034b3cc903915
             Cursor.Current = Cursors.Default;
         }
 
@@ -1028,15 +1148,26 @@ namespace LoLBalancing
         }
 
         private void button_GenStats_Click(object sender, EventArgs e) {
+<<<<<<< HEAD
             /*if (!string.IsNullOrWhiteSpace(matchTxt) && !string.IsNullOrWhiteSpace(namesTxt)) {
                 label_StatsMsg.Visible = true;
                 StatsGen Stats = new StatsGen();
                 Stats.Generate(matchTxt, namesTxt, textBox_APIKey.Text, comboBox_Region.Text.ToLower());
+=======
+            if (!string.IsNullOrWhiteSpace(MatchTxt) && !string.IsNullOrWhiteSpace(NamesTxt)) {
+                label_StatsMsg.Visible = true;
+                StatsGen Stats = new StatsGen();
+                Stats.Generate(MatchTxt, NamesTxt, textBox_APIKey.Text, comboBox_Region.Text.ToLower());
+>>>>>>> 95a8610616dbaa5c3713e2c5673034b3cc903915
                 label_StatsMsg.Visible = false;
             }
             else {
                 MessageBox.Show("Matches and/or Names not loaded.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+<<<<<<< HEAD
             }*/
+=======
+            }
+>>>>>>> 95a8610616dbaa5c3713e2c5673034b3cc903915
         }
 
         private void button_LoadComp_Click(object sender, EventArgs e) {

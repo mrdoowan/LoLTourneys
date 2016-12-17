@@ -10,7 +10,11 @@ using Excel = Microsoft.Office.Interop.Excel;
 
 namespace LoLBalancing
 {
+<<<<<<< HEAD
 	public class StatsGen
+=======
+	class StatsGen
+>>>>>>> 95a8610616dbaa5c3713e2c5673034b3cc903915
 	{
 		// Default constructor
 		public StatsGen() { }
