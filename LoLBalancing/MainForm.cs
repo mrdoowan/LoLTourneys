@@ -1013,8 +1013,8 @@ namespace LoLBalancing
                 label_ID.Text = "GAME " + (pageNum + 1) + ": " + page.gameID;
                 int blueNum = page.blueTeamNum;
                 int redNum = page.redTeamNum;
-                label6.Text = "TEAM " + blueNum;
-                label7.Text = "TEAM " + redNum;
+                label_BlueTeam.Text = "TEAM " + blueNum;
+                label_RedTeam.Text = "TEAM " + redNum;
                 // 0
                 initialize_GUI_Player(page, 0, blueNum, comboBox_Role0,
                     comboBox_Name0, label_Champ0);
@@ -1207,7 +1207,7 @@ namespace LoLBalancing
                             string[] playerDets = matches[i].Split(' ');
                             string role = playerDets[0];
                             string champ = playerDets[1].Replace('+', ' ');
-                            string summoner = playerDets[2].TrimEnd('\n');
+                            string summoner = playerDets[2].Replace('+', ' ').TrimEnd('\n');
                             game.addPlayer(champ, role, summoner);
                         }
                         statsGames.Add(game);
@@ -1248,7 +1248,7 @@ namespace LoLBalancing
                                 sb.Append(game.Players[j].role + " ");
                                 string champSpace = game.Players[j].champ.Replace(' ', '+');
                                 sb.Append(champSpace + " ");
-                                sb.Append(game.Players[j].summoner + '\n');
+                                sb.Append(game.Players[j].summoner.Replace(' ', '+') + '\n');
                             }
                         }
                         string filename = saveExcelDialog.FileName;
