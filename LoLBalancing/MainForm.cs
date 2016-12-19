@@ -22,7 +22,7 @@ namespace LoLBalancing
 
 		#region Variables and Structs
 		// Constants
-		private const int NUM_PLAYERS = 5;
+		public const int NUM_PLAYERS = 5;
 
 		// Variables for upgrading
 		static private bool upgrading = false;
@@ -127,37 +127,6 @@ namespace LoLBalancing
         // Txt File strings
         private string matchTxt;
         private string namesTxt;
-
-        // Stats Variables
-        public class StatsPlayer
-        {
-            public string champ { get; set; }
-            public string role { get; set; }
-            public string summoner { get; set; }
-
-            // Default Constructor
-            public StatsPlayer(string champ_, string role_, string summoner_ = "") {
-                champ = champ_;
-                role = role_;
-                summoner = summoner_;
-            }
-        }
-
-        public class StatsGame
-        {
-            public List<StatsPlayer> Players;
-            public long gameID { get; set; }
-            public int redTeamNum { get; set; }
-            public int blueTeamNum { get; set; }
-
-            // Default Constructor
-            public StatsGame(long ID_, int red_, int blue_) {
-                Players = new List<StatsPlayer>();
-                gameID = ID_;
-                redTeamNum = red_;
-                blueTeamNum = blue_;
-            }
-        }
 
         private int pageNumber;
         private List<List<string>> IGNs = new List<List<string>>();
@@ -985,7 +954,7 @@ namespace LoLBalancing
                         else if (lane == "MIDDLE") { lane = "MID"; }
 						else if (role == "DUO_CARRY") { lane = "ADC"; }
 						else if (role == "DUO_SUPPORT") { lane = "SUP"; }
-						parseGame.Players.Add(new StatsPlayer(champName, lane));
+						parseGame.addPlayer(champName, lane);
 					}
 					statsGames.Add(parseGame);
                 }
@@ -1137,15 +1106,71 @@ namespace LoLBalancing
         }
 
         private void button_GenStats_Click(object sender, EventArgs e) {
-            /*if (!string.IsNullOrWhiteSpace(matchTxt) && !string.IsNullOrWhiteSpace(namesTxt)) {
-                label_StatsMsg.Visible = true;
-                StatsGen Stats = new StatsGen();
-                Stats.Generate(matchTxt, namesTxt, textBox_APIKey.Text, comboBox_Region.Text.ToLower());
-                label_StatsMsg.Visible = false;
+            // Check gameStats for validation of every Role
+            int gameNum = 1;
+            foreach (StatsGame game in statsGames) {
+                string[] rolesArr = { "TOP", "JNG", "MID", "ADC", "SUP" };
+                // BLUE
+                List<string> rolesListBlue = rolesArr.ToList();
+                for (int i = 0; i < NUM_PLAYERS; ++i) {
+                    rolesListBlue.Remove(game.Players[i].role);
+                }
+                // RED
+                List<string> rolesListRed = rolesArr.ToList();
+                for (int i = NUM_PLAYERS; i < NUM_PLAYERS * 2; ++i) {
+                    rolesListRed.Remove(game.Players[i].role);
+                }
+                if (rolesListBlue.Count > 0 || rolesListRed.Count > 0) {
+                    MessageBox.Show("Game " + gameNum + " do not have all Roles fulfilled.",
+                        "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                gameNum++;
             }
-            else {
-                MessageBox.Show("Matches and/or Names not loaded.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }*/
+            // Check gameStats for validation of every Summoner
+            gameNum = 1;
+            foreach (StatsGame game in statsGames) {
+                // BLUE
+                List<string> summTeamBlue = new List<string>();
+                for (int i = 0; i < NUM_PLAYERS; ++i) {
+                    string summoner = game.Players[i].summoner;
+                    if (string.IsNullOrWhiteSpace(summoner)) {
+                        MessageBox.Show("Game " + gameNum + " has a blank summoner.",
+                            "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    summTeamBlue.Add(game.Players[i].summoner);
+                }
+                // RED
+                List<string> summTeamRed = new List<string>();
+                for (int i = NUM_PLAYERS; i < NUM_PLAYERS * 2; ++i) {
+                    string summoner = game.Players[i].summoner;
+                    if (string.IsNullOrWhiteSpace(summoner)) {
+                        MessageBox.Show("Game " + gameNum + " has a blank summoner.",
+                            "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    summTeamRed.Add(game.Players[i].summoner);
+                }
+                if (summTeamBlue.Count != summTeamBlue.Distinct().Count() ||
+                    summTeamRed.Count != summTeamRed.Distinct().Count()) {
+                    MessageBox.Show("Game " + gameNum + " has duplicate summoners.",
+                            "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+                gameNum++;
+            }
+            // Next check for empty MatchTxt
+            if (string.IsNullOrWhiteSpace(matchTxt)) {
+                MessageBox.Show("No Match text loaded of any kind.", "Error", 
+                    MessageBoxButtons.OK,MessageBoxIcon.Error);
+                return;
+            }
+            // Proceed to make Stats
+            label_StatsMsg.Visible = true;
+            StatsGen Stats = new StatsGen(comboBox_Region.Text, textBox_APIKey.Text);
+            Stats.Generate(statsGames, matchTxt);
+            label_StatsMsg.Visible = false;
         }
 
         private void button_LoadComp_Click(object sender, EventArgs e) {
@@ -1155,8 +1180,8 @@ namespace LoLBalancing
             dlgFileOpen.RestoreDirectory = true;
             if (dlgFileOpen.ShowDialog() == DialogResult.OK) {
                 try {
-                    StreamReader sr = new StreamReader(dlgFileOpen.FileName);
-                    string file = sr.ReadToEnd();
+                    StreamReader sr_Names = new StreamReader(dlgFileOpen.FileName);
+                    string file = sr_Names.ReadToEnd();
                     // Names
                     int endIndex = file.IndexOf("----MATCH_INFO----");
                     namesTxt = file.Substring(0, endIndex);
@@ -1166,8 +1191,11 @@ namespace LoLBalancing
                     int begIndexMatches = file.IndexOf('\n', endIndex);
                     string matchesString = file.Substring(begIndexMatches + 1);
                     string[] matches = matchesString.Split('\n');
+                    StringBuilder sb_Matches = new StringBuilder();
+                    sb_Matches.Append(IGNs.Count.ToString() + "\n");
                     for (int i = 0; i < matches.Length; ++i) {
                         // ID BLUE RED
+                        sb_Matches.Append(matches[i] + "\n");
                         string[] matchNums = matches[i].Split(' ');
                         long ID = long.Parse(matchNums[0]);
                         int blueNum = int.Parse(matchNums[1]);
@@ -1180,17 +1208,24 @@ namespace LoLBalancing
                             string role = playerDets[0];
                             string champ = playerDets[1].Replace('+', ' ');
                             string summoner = playerDets[2].TrimEnd('\n');
-                            StatsPlayer player = new StatsPlayer(champ, role, summoner);
-                            game.Players.Add(player);
+                            game.addPlayer(champ, role, summoner);
                         }
                         statsGames.Add(game);
                     }
+                    matchTxt = sb_Matches.ToString().TrimEnd('\n');
                     // Instantiate the first page
                     initialize_GUI_Page(0);
+                    // Also notify that Matches and Names are loaded
+                    label_MatchLoad.Visible = true;
+                    label_NamesLoad.Visible = true;
                 }
                 catch (Exception ex) {
-                    MessageBox.Show("Error in loading Compilation.\nReason: " +
+                    MessageBox.Show("Error in loading Compilation.\nMatch and Names unloaded\nReason: " +
                         ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    matchTxt = "";
+                    namesTxt = "";
+                    label_MatchLoad.Visible = false;
+                    label_NamesLoad.Visible = false;
                 }
             }
         }
@@ -1210,11 +1245,10 @@ namespace LoLBalancing
                             sb.Append(game.gameID + " " + game.blueTeamNum +
                                 " " + game.redTeamNum + '\n');
                             for (int j = 0; j < game.Players.Count; ++j) {
-                                StatsPlayer player = game.Players[j];
-                                sb.Append(player.role + " ");
-                                string champSpace = player.champ.Replace(' ', '+');
+                                sb.Append(game.Players[j].role + " ");
+                                string champSpace = game.Players[j].champ.Replace(' ', '+');
                                 sb.Append(champSpace + " ");
-                                sb.Append(player.summoner + '\n');
+                                sb.Append(game.Players[j].summoner + '\n');
                             }
                         }
                         string filename = saveExcelDialog.FileName;

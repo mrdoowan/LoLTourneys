@@ -12,22 +12,31 @@ namespace LoLBalancing
 {
 	public class StatsGen
 	{
-		// Default constructor
-		public StatsGen() { }
 
         #region Private Variables / Functions
-        private int NumTeams;
-        private int TotalGames;
+        private int numTeams;
+        private int totalGames;
         private string Patch;
+        private string region;
+        private string APIKey;
         private JToken Champs;
+        private int NUM_PLAYERS;
+
+        // Default constructor
+        public StatsGen(string region_, string APIKey_) {
+            region = region_;
+            APIKey = APIKey_;
+            RiotJson json = new RiotJson(region, APIKey);
+            Champs = json.getChampJson();
+            // Initialize champion with the Champion Data
+            NUM_PLAYERS = MainForm.NUM_PLAYERS;
+        }
 
         // Returns Champion Name based on ID
         private string GetChampName(string ID) {
             return Champs[ID]["name"].ToString();
         }
-
-        // Key: TeamNum, Value: List of Names
-        private static Dictionary<int, List<string>> TeamNames = new Dictionary<int, List<string>>();
+        
         // Compact List of Teams
         private static List<Team> Teams = new List<Team>();
         // Key: Champ Name, Value: # Times
@@ -172,209 +181,146 @@ namespace LoLBalancing
         #endregion
 
         // Input is a .txt file with all the Match History IDs
-        public void Generate(string MatchesTxt, string NamesTxt, string APIKey, string region) {
+        public void Generate(List<StatsGame> gameList, string matchTxt) {
 			Application.DoEvents();
 			Cursor.Current = Cursors.WaitCursor;
-            TeamNames.Clear(); Teams.Clear(); Bans.Clear(); Picks.Clear();
+            Teams.Clear(); Bans.Clear(); Picks.Clear();
             int requests = 1;
             try {
-                // ---------------------------------
-                // PARSE NAMES .TXT
-                // ---------------------------------
-                string[] NamesRow = NamesTxt.Split('\n');
-                int TeamNum = 1, NumCheck = 0;
-                List<string> IGNs = new List<string>(); // Key: IGN, Value: Role
-                for (int i = 0; i < NamesRow.Length; ++i) {
-                    if (i == 0) {
-                        // First Row should be a 1
-                        if (int.Parse(NamesRow[i]) != 1) {
-                            MessageBox.Show("Wrong Format: 1 isn't the beginning of the Names .txt", "Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-                    }
-                    else if (int.TryParse(NamesRow[i], out NumCheck)) {
-                        // Reading Number
-                        if (NumCheck != TeamNum + 1) {
-                            MessageBox.Show("Team Numbers are not chronological.\nReload a correct Names .txt", "Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-                        else if (IGNs.Count < 5) {
-                            MessageBox.Show("There are < 5 people in a Team.\nReload a correct Names .txt", "Error",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                            return;
-                        }
-                        else {
-                            // We see a Number, so we add the List of Summoners
-                            TeamNames.Add(TeamNum, IGNs);
-                            IGNs = new List<string>();
-                            TeamNum++;
-                        }
-                    }
-                    else {
-                        // Reading String (Summoner)
-                        IGNs.Add(NamesRow[i]);
-                    }
-                }
-                // Add the very last team.
-                if (IGNs.Count < 5) {
-                    MessageBox.Show("There are < 5 people in a Team.\nReload a correct Names .txt", "Error",
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-                else {
-                    TeamNames.Add(TeamNum, IGNs);
-                }
+                
                 // ---------------------------------
                 // PARSE MATCH .TXT
                 // ---------------------------------
-                string[] MatchRow = MatchesTxt.Split('\n');
-				NumTeams = int.Parse(MatchRow[0]);
+                string[] matchRow = matchTxt.Split('\n');
+				numTeams = int.Parse(matchRow[0]);
                 // --------------- Initialize Teams with number of Teams
-                for (int i = 0; i < NumTeams; ++i) {
+                for (int i = 0; i < numTeams; ++i) {
                     Teams.Add(new Team());
                 }
-                TotalGames = MatchRow.Length - 1;
-                // --------------- Retrieve Champion Information 
-                // (This will also authenticate the API Key)
-                string ChampJson = "";
-                using (var WC = new WebClient()) {
-                    ChampJson = WC.DownloadString("https://global.api.pvp.net/api/lol/static-data/" + region + 
-                        "/v1.2/champion?locale=en_US&dataById=true&api_key=" + APIKey);
-                }
-                Champs = JObject.Parse(ChampJson)["data"];
+                totalGames = matchRow.Length - 1;
                 // ---------------------------------
                 // RETRIEVE MATCH HISTORY
                 // ---------------------------------
-                for (int i = 1; i < MatchRow.Length; ++i) {
+                for (int i = 1; i < matchRow.Length; ++i) {
                     // --------------- Parse .Txt file
-                    string[] Details = MatchRow[i].Split(' ');
-                    string ID = Details[0];
-                    int BlueTeamNum = int.Parse(Details[1]);
-                    int RedTeamNum = int.Parse(Details[2]);
-                    Team BlueTeam = Teams[BlueTeamNum - 1];
-                    Team RedTeam = Teams[RedTeamNum - 1];
+                    string[] details = matchRow[i].Split(' ');
+                    string ID = details[0];
+                    int blueTeamNum = int.Parse(details[1]);
+                    int redTeamNum = int.Parse(details[2]);
+                    Team blueTeam = Teams[blueTeamNum - 1];
+                    Team redTeam = Teams[redTeamNum - 1];
+                    StatsGame gameDets = gameList[i - 1];
                     // --------------- Get URL Request of JSON
-                    string URL = "https://" + region + ".api.pvp.net/api/lol/" + region +
-                        "/v2.2/match/" + ID + "?api_key=" + APIKey;
-                    string MatchJson = "";
-                    using (var WC = new WebClient()) {
-                        // Need to carefully cycle Rate Limits
-                        while (true) {
-                            try {
-                                // Retrieve URL
-                                MatchJson = WC.DownloadString(URL);
-                                Thread.Sleep(1000);
-                                break;
-                            }
-                            catch (Exception e) {
-                                // Expecting 429 Error
-                                if (!e.Message.Contains("429")) {
-                                    MessageBox.Show("Error: " + e.Message, "Error",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Error);
-                                    return;
-                                }
-                                Thread.Sleep(1000);
-                                continue;
-                            }
-                        }
-                    }
-                    JObject MatchParse = JObject.Parse(MatchJson);
-                    string[] PatchDetail = MatchParse["matchVersion"].ToString().Split('.');
-                    if (requests == 1) { Patch = PatchDetail[0] + "." + PatchDetail[1]; } // Only need Patch from 1
+                    RiotJson json = new RiotJson(region, APIKey);
+                    JObject matchParse = json.getMatchJson(ID.ToString());
+                    string[] patchDetail = matchParse["matchVersion"].ToString().Split('.');
+                    if (requests == 1) { Patch = patchDetail[0] + "." + patchDetail[1]; } 
+                    // Only need Patch from Game 1
                     // --------------- Team Kills, Team Gold, Match Time, Team Data
-                    JToken SummJson = MatchParse["participants"];   // SummJson[0-4] -> Blue, SummJson[5-9] -> Red
-                    JToken TeamJson = MatchParse["teams"];          // TeamJson[0] -> Blue, TeamJson[1] -> Red
-                    int MatchTime = int.Parse(MatchParse["matchDuration"].ToString());
-                    int BlueGameNum = BlueTeam.TeamGames.Count + 1;
-                    int RedGameNum = RedTeam.TeamGames.Count + 1;
+                    JToken summJson = matchParse["participants"];   // summJson[0-4] -> Blue, summJson[5-9] -> Red
+                    JToken teamJson = matchParse["teams"];          // teamJson[0] -> Blue, teamJson[1] -> Red
+                    int matchTime = int.Parse(matchParse["matchDuration"].ToString());
+                    int blueGameNum = blueTeam.TeamGames.Count + 1;
+                    int redGameNum = redTeam.TeamGames.Count + 1;
                     for (int j = 0; j <= 1; ++j) {
-                        bool Win = bool.Parse(TeamJson[j]["winner"].ToString());
-                        bool FB = bool.Parse(TeamJson[j]["firstBlood"].ToString());
-                        int Kills = 0, Deaths = 0, Gold = 0;
-                        for (int k = 0; k < 5; ++k) {
+                        bool win = bool.Parse(teamJson[j]["winner"].ToString());
+                        bool FB = bool.Parse(teamJson[j]["firstBlood"].ToString());
+                        int kills = 0, deaths = 0, gold = 0;
+                        for (int k = 0; k < NUM_PLAYERS; ++k) {
                             if (j == 0) {
-                                Kills += int.Parse(SummJson[k]["stats"]["kills"].ToString());
-                                Deaths += int.Parse(SummJson[k]["stats"]["deaths"].ToString());
-                                Gold += int.Parse(SummJson[k]["stats"]["goldEarned"].ToString());
+                                kills += int.Parse(summJson[k]["stats"]["kills"].ToString());
+                                deaths += int.Parse(summJson[k]["stats"]["deaths"].ToString());
+                                gold += int.Parse(summJson[k]["stats"]["goldEarned"].ToString());
                             }
                             else {
-                                Kills += int.Parse(SummJson[k + 5]["stats"]["kills"].ToString());
-                                Deaths += int.Parse(SummJson[k + 5]["stats"]["deaths"].ToString());
-                                Gold += int.Parse(SummJson[k + 5]["stats"]["goldEarned"].ToString());
+                                kills += int.Parse(summJson[k + NUM_PLAYERS]["stats"]["kills"].ToString());
+                                deaths += int.Parse(summJson[k + NUM_PLAYERS]["stats"]["deaths"].ToString());
+                                gold += int.Parse(summJson[k + NUM_PLAYERS]["stats"]["goldEarned"].ToString());
                             }
                         }
-                        bool RiftHerald = bool.Parse(TeamJson[j]["firstRiftHerald"].ToString());
-                        int Dragons = int.Parse(TeamJson[j]["dragonKills"].ToString());
-                        int Barons = int.Parse(TeamJson[j]["baronKills"].ToString());
-                        int Towers = int.Parse(TeamJson[j]["towerKills"].ToString());
+                        bool riftHerald = bool.Parse(teamJson[j]["firstRiftHerald"].ToString());
+                        int dragons = int.Parse(teamJson[j]["dragonKills"].ToString());
+                        int barons = int.Parse(teamJson[j]["baronKills"].ToString());
+                        int towers = int.Parse(teamJson[j]["towerKills"].ToString());
                         // Add to TeamGames
-                        TeamGame GameForTeam = new TeamGame(Kills, Deaths, Gold, Win, FB, RiftHerald,
-                            Barons, Dragons, Towers, MatchTime);
-                        if (j == 0) { BlueTeam.TeamGames.Add(BlueGameNum, GameForTeam); }
-                        else { RedTeam.TeamGames.Add(RedGameNum, GameForTeam); }
+                        TeamGame gameForTeam = new TeamGame(kills, deaths, gold, win, FB, riftHerald,
+                            barons, dragons, towers, matchTime);
+                        if (j == 0) { blueTeam.TeamGames.Add(blueGameNum, gameForTeam); }
+                        else { redTeam.TeamGames.Add(redGameNum, gameForTeam); }
                     }
                     // --------------- Bans
                     for (int j = 0; j <= 1; ++j) {
-                        foreach (JToken ban in TeamJson[j]["bans"]) {
+                        foreach (JToken ban in teamJson[j]["bans"]) {
                             AddBansPick(ref Bans, ban["championId"].ToString());
                         }
                     }
                     // --------------- Summoner Data
                     List<PlayerGame> SummonersData = new List<PlayerGame>();
                     // Blue -> j == 0:4, Red -> == 5:9
-                    for (int j = 0; j < 10; ++j) {
-                        string Champ = GetChampName(SummJson[j]["championId"].ToString());
-                        AddBansPick(ref Picks, SummJson[j]["championId"].ToString()); // Add to Picks Dictionary
-                        string Role = SummJson[j]["timeline"]["role"].ToString();
-                        string Lane = SummJson[j]["timeline"]["lane"].ToString();
-                        if (Role == "DUO_CARRY") { Lane = "ADC"; }
-                        else if (Role == "DUO_SUPPORT") { Lane = "SUPPORT"; }
-                        int CSat10 = (int)(Math.Round(double.Parse(SummJson[j]["timeline"]["creepsPerMinDeltas"]["zeroToTen"].ToString()), 1) * 10);
-                        JToken SummStats = SummJson[j]["stats"];
+                    for (int j = 0; j < NUM_PLAYERS * 2; ++j) {
+                        // player = gameDets.Players[j]
+                        string champ = gameDets.Players[j].champ;
+                        AddBansPick(ref Picks, champ); // Add to Picks Dictionary
+                        string role = gameDets.Players[j].role;
+                        int CSat10 = (int)(Math.Round(double.Parse(summJson[j]["timeline"]["creepsPerMinDeltas"]["zeroToTen"].ToString()), 1) * 10);
+                        JToken SummStats = summJson[j]["stats"];
                         int CS = int.Parse(SummStats["minionsKilled"].ToString()) +
                             int.Parse(SummStats["neutralMinionsKilled"].ToString());
-                        int Gold = int.Parse(SummStats["goldEarned"].ToString());
+                        int gold = int.Parse(SummStats["goldEarned"].ToString());
                         int DMG_Champs = int.Parse(SummStats["totalDamageDealtToChampions"].ToString());
                         int DMG_Taken = int.Parse(SummStats["totalDamageTaken"].ToString());
-                        int Kills = int.Parse(SummStats["kills"].ToString());
-                        int Deaths = int.Parse(SummStats["deaths"].ToString());
-                        int Assists = int.Parse(SummStats["assists"].ToString());
-                        int Wards_Des = int.Parse(SummStats["wardsKilled"].ToString());
-                        int Wards_Pla = int.Parse(SummStats["wardsPlaced"].ToString());
-                        int Penta = int.Parse(SummStats["pentaKills"].ToString());
-                        int Quadra = int.Parse(SummStats["quadraKills"].ToString()) - Penta;
-                        int Triple = int.Parse(SummStats["tripleKills"].ToString()) - Quadra - Penta;
-                        int Double = int.Parse(SummStats["doubleKills"].ToString()) - Triple - Quadra - Penta;
-                        int GameNum = 0;
-                        if (j < 5) { GameNum = BlueGameNum; }
-                        else { GameNum = RedGameNum; }
-                        SummonersData.Add(new PlayerGame(GameNum, Champ, Lane, MatchTime, CSat10, CS, Gold,
-                                DMG_Champs, DMG_Taken, Kills, Deaths, Assists, Wards_Des, Wards_Pla, Double,
-                                Triple, Quadra, Penta));
+                        int kills = int.Parse(SummStats["kills"].ToString());
+                        int deaths = int.Parse(SummStats["deaths"].ToString());
+                        int assists = int.Parse(SummStats["assists"].ToString());
+                        int wardsDes = int.Parse(SummStats["wardsKilled"].ToString());
+                        int wardsPla = int.Parse(SummStats["wardsPlaced"].ToString());
+                        int pentaKill = int.Parse(SummStats["pentaKills"].ToString());
+                        int quadraKill = int.Parse(SummStats["quadraKills"].ToString()) - pentaKill;
+                        int tripleKill = int.Parse(SummStats["tripleKills"].ToString()) - quadraKill - pentaKill;
+                        int doubleKill = int.Parse(SummStats["doubleKills"].ToString()) - tripleKill - quadraKill - pentaKill;
+                        int gameNum = 0;
+                        if (j < NUM_PLAYERS) { gameNum = blueGameNum; }
+                        else { gameNum = redGameNum; }
+                        SummonersData.Add(new PlayerGame(gameNum, champ, role, matchTime, CSat10, CS, gold,
+                                DMG_Champs, DMG_Taken, kills, deaths, assists, wardsDes, wardsPla, doubleKill,
+                                tripleKill, quadraKill, pentaKill));
                     }
-                    // -------------- Check if every role is correct. Prompt a Window if not.
-                    
-                    // Calculate CSDiff@10 after Role Determination
+                    // Calculate CSDiff@10
                     var BlueCS10 = new Dictionary<string, int>();
                     var RedCS10 = new Dictionary<string, int>();
                     int pla = 0;
                     foreach (PlayerGame Player in SummonersData) {
-                        if (pla < 5) { BlueCS10.Add(Player.Role, Player.CSDiff10); }
+                        if (pla < NUM_PLAYERS) { BlueCS10.Add(Player.Role, Player.CSDiff10); }
                         else { RedCS10.Add(Player.Role, Player.CSDiff10); }
                         pla++;
                     }
-                    string[] Roles = { "TOP", "JUNGLE", "MIDDLE", "ADC", "SUPPORT" };
+                    string[] Roles = { "TOP", "JNG", "MID", "ADC", "SUP" };
                     var BlueCSDiff = new Dictionary<string, int>();
                     foreach (string role in Roles) {
                         int CSDiff = BlueCS10[role] - RedCS10[role];
                         BlueCSDiff.Add(role, CSDiff);
                     }
-                    for (int j = 0; j < SummonersData.Count; ++j) {
+                    for (int j = 0; j < NUM_PLAYERS * 2; ++j) {
                         string Role = SummonersData[j].Role;
-                        if (j < 5) { SummonersData[j].CSDiff10 = BlueCSDiff[Role]; }
+                        if (j < NUM_PLAYERS) { SummonersData[j].CSDiff10 = BlueCSDiff[Role]; }
                         else { SummonersData[j].CSDiff10 = BlueCSDiff[Role] * -1; }
+                    }
+                    // Add into Players with Summoner Name as Key
+                    for (int j = 0; j < NUM_PLAYERS * 2; ++j) {
+                        string summoner = gameDets.Players[j].summoner;
+                        Team sel_Team = null;
+                        if (j < NUM_PLAYERS) { sel_Team = blueTeam; }
+                        else { sel_Team = redTeam; }
+                        if (sel_Team.Players.ContainsKey(summoner)) {
+                            // Add new entry if Key doesn't exist
+                            var addList = new List<PlayerGame>();
+                            addList.Add(SummonersData[j]);
+                            sel_Team.Players.Add(summoner, addList);
+                        }
+                        else {
+                            // Add into existing
+                            sel_Team.Players[summoner].Add(SummonersData[j]);
+                        }
                     }
                     // --------------- Process Requests
                     requests++;
@@ -383,6 +329,7 @@ namespace LoLBalancing
                 // GENERATE EXCEL SHEET
                 // ---------------------------------
                 MessageBox.Show("Stats compiled successfully! Please save the Excel file.");
+
                 #region Huge Bulky Code of Making Excel Sheet
                 SaveFileDialog saveExcelDialog = new SaveFileDialog();
                 saveExcelDialog.Filter = "Excel Sheet (*.xlsx)|*.xlsx";
